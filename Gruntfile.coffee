@@ -223,7 +223,7 @@ module.exports = (grunt) ->
           optimize: 'uglify2'
           preserveLicenseComments: false
           generateSourceMaps: true
-          name: 'app'
+          name: 'main'
 
     # Put files not handled in other tasks here
     copy:
@@ -276,5 +276,5 @@ module.exports = (grunt) ->
     grunt.task.run ["clean:server", "concurrent:server", "autoprefixer", "connect:livereload", "open", "watch"]
 
   grunt.registerTask "test", ["clean:server", "concurrent:test", "autoprefixer", "connect:test", "karma"]
-  grunt.registerTask "build", ["clean:dist", "useminPrepare", "concurrent:dist", "autoprefixer", "concat", "copy:dist", "ngmin", "cssmin", "requirejs", "usemin"]
+  grunt.registerTask "build", ["clean:dist", "useminPrepare", "concurrent:dist", "autoprefixer", "concat", "copy:dist", "ngmin", "cssmin", "requirejs", "rev", "usemin"]
   grunt.registerTask "default", ["jshint", "test", "build"]

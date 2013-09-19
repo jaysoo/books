@@ -11,7 +11,8 @@
     "angular-cookies": "~1.0.7",
     "angular-sanitize": "~1.0.7",
     "requirejs": "~2.1.8",
-    "lodash": "~2.0.0"
+    "lodash": "~2.0.0",
+    "brick": "~1.0.0-beta7"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

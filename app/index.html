@@ -10,7 +10,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
 
-    <!-- build:css(.tmp) styles/main.css -->
+    <!-- build:css(.tmp) styles/styles.css -->
+    <link rel="stylesheet" href="bower_components/brick/dist/brick.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -26,6 +27,12 @@
       <div class="container" data-ng-view data-ng-cloak></div>
     </div>
 
+    <!-- build:js(.tmp) scripts/brick.js -->
+    <script src="bower_components/brick/dist/brick.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js(.tmp) scripts/main.js -->
     <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+    <!-- endbuild -->
   </body>
 </html>
