@@ -15,7 +15,17 @@
     <!-- endbuild -->
   </head>
   <body>
-    <div class="container" data-ng-view role="main"></div>
+  
+    <div id="wrapper" data-ng-class="{initialized: initialized}">
+      <div data-ng-controller="LoggedInUserCtrl">
+        <span data-ng-hide="!user">
+          Hi {{user.displayName}}!
+          <a data-ng-click="logout()">logout</a>
+        </span>
+      </div>
+      <div class="container" data-ng-view data-ng-cloak></div>
+    </div>
+
     <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
   </body>
 </html>

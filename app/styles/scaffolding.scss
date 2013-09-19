@@ -9,3 +9,11 @@ body {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   color: $textColor;
 }
+
+#wrapper {
+  display: none;
+
+  &.initialized {
+    display: block;
+  }
+}
