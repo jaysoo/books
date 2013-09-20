@@ -2,11 +2,11 @@
 
 define([
   'lodash',
-  'books/app',
+  'app',
   'firebase'
 
-], function(_, BooksApp, Firebase) {
-  BooksApp.service('AuthService', AuthService);
+], function(_, App, Firebase) {
+  App.service('AuthService', AuthService);
 
   function AuthService($rootScope, $q, angularFireAuth) {
     this.$rootScope = $rootScope;

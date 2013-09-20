@@ -9,7 +9,7 @@ define([
   'angular-fire'
 ], function(angular) {
 
-  return angular.module('booksApp', [
+  return angular.module('app', [
     'ngAnimate',
     'ngCookies',
     'ngResource',

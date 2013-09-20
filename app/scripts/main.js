@@ -38,16 +38,20 @@ require({
 }, [
   'angular',
 
-  // BooksApp
-  'books/app',
-  'books/routes',
+  // Routes
+  'routes',
+
+  // Authentication
+  'auth/controllers/login',
+  'auth/controllers/logged_in_user',
+  'auth/services/auth',
+
+  // Books
+  'app',
   'books/run',
-  'books/controllers/books_list',
-  'books/controllers/login',
-  'books/controllers/logged_in_user',
-  'books/services/auth'
+  'books/controllers/books_list'
 
 ], function(angular) {
-  return angular.bootstrap(document, ['booksApp']);
+  return angular.bootstrap(document, ['app']);
 });
 

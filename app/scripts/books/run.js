@@ -1,8 +1,8 @@
 'use strict';
 
-define(['books/app'], function(BooksApp) {
+define(['app'], function(App) {
 
-  BooksApp.run(function($rootScope, $location, AuthService) {
+  App.run(function($rootScope, $location, AuthService) {
     AuthService.initialize().then(function(user) {
       if (user && $location.url() === '/login') {
         $location.url('/');
