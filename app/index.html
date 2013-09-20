@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body>
-  
+  <body data-ng-cloak>
+
     <div id="wrapper" data-ng-class="{initialized: initialized}">
       <div data-ng-controller="LoggedInUserCtrl">
         <span data-ng-hide="!user">
@@ -24,7 +24,7 @@
           <a data-ng-click="logout()">logout</a>
         </span>
       </div>
-      <div class="container" data-ng-view data-ng-cloak></div>
+      <div class="container" data-ng-view></div>
     </div>
 
     <!-- build:js(.tmp) scripts/brick.js -->
