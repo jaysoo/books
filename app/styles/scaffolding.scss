@@ -10,6 +10,10 @@ body {
   color: $textColor;
 }
 
+a {
+  cursor: pointer;
+}
+
 [data-ng-cloak] {
   display: none !important;
 }
