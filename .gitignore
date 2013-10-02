@@ -3,4 +3,5 @@ dist
 .tmp
 .sass-cache
 app/bower_components
+rethinkdb_data
 *.sw[a-z]
