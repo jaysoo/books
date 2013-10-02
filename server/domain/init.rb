@@ -1,7 +1,7 @@
-# encoding: utf-8
+root = ::File.dirname(__FILE__)
 
 
 []
-  .concat(Dir["books/*.rb"])
-  .concat(Dir["identity/*.rb"])
-  .each {|file| require File.basename(file) }
+  .concat(Dir["#{root}/books/*.rb"])
+  .concat(Dir["#{root}/identity/*.rb"])
+  .each { |file| require file }

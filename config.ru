@@ -1,3 +1,3 @@
 root = ::File.dirname(__FILE__)
-require ::File.join(root, 'server', 'init')
+require ::File.join(root, 'server', 'app')
 run App.new

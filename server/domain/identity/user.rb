@@ -1,4 +1,6 @@
-# encoding: utf-8
-
 class User
+  attr_accessor :id, :name, :email
+
+  def initialize
+  end
 end

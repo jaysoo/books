@@ -1,6 +1,5 @@
-# encoding: utf-8
 require 'sinatra'
-require 'haml'
+
 
 class App < Sinatra::Application
   enable :sessions
@@ -19,5 +18,7 @@ class App < Sinatra::Application
   end
 end
 
+
 require_relative 'domain/init'
+require_relative 'ports/persistence/rethinkdb_adaptor/init'
 require_relative 'routes'
