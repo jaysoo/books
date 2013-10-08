@@ -53,7 +53,9 @@ require({
   // Books
   'app',
   'books/run',
-  'books/controllers/books_list'
+  'books/controllers/add_book',
+  'books/controllers/books_list',
+  'books/services/add_book'
 
 ], function(angular) {
   return angular.bootstrap(document, ['app']);

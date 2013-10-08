@@ -11,6 +11,10 @@ define(['app'], function(App) {
         templateUrl: 'views/auth/login.html',
         controller: 'LoginCtrl'
       })
+      .when('/add-book', {
+        templateUrl: 'views/books/add.html',
+        controller: 'AddBookCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

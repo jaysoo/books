@@ -1,5 +1,9 @@
-<ul>
-  <li data-ng-repeat="book in books">
+<ul class="books-list">
+  <li class="book add-book">
+    <a href="#/add-book">Add Book</a>
+  </li>
+
+  <li class="book" data-ng-repeat="book in books">
     {{ book.title }}
   </li>
 </ul>
