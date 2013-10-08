@@ -1,0 +1,33 @@
+@import "variables";
+
+.books-list {
+  $gutter: 10px;
+  $boxSize: 940px/3 - $gutter;
+
+  list-style: none;
+  overflow: hidden;
+
+  .book {
+    box-sizing: border-box;
+    float: left;
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: $gutter / 2;
+    padding: 10px;
+
+    height: $boxSize - $gutter;
+    width: $boxSize - $gutter;
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &.add-book {
+      border-style: dashed;
+      font-size: $font-largest;
+      padding-top: $boxSize/2 - $gutter/2 - $font-largest;
+      text-align: center;
+    }
+  }
+}

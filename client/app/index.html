@@ -24,10 +24,10 @@
           </div>
           <ul class="nav">
           </ul>
-          <ul class="nav pull-right">
-            <li ng-controller="LoggedInUserCtrl" class="dropdown" ng-hide="!user">
+          <ul class="nav pull-right" ng-controller="LoggedInUserCtrl" >
+            <li class="dropdown" ng-hide="!user">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <img ng-src="{{user.avatar_url}}" class="avatar"/>
+                <img ng-src="{{avatarUrl()}}" class="avatar"/>
                 {{user.email}}
                 <b class="caret"></b>
               </a>

@@ -4,9 +4,12 @@ define([
   'lodash',
   'app',
   'firebase',
+
+  '../models/user',
+
   'persona-sdk'
 
-], function(_, App, Firebase) {
+], function(_, App, Firebase, User) {
   App.service('AuthService', AuthService);
 
   function AuthService($rootScope, $q, angularFireAuth) {
@@ -16,12 +19,11 @@ define([
     this.angularFireAuth = angularFireAuth;
   }
 
-  AuthService.prototype.handleFireAuth = function(err, user) {
+  AuthService.prototype.handleFireAuth = function(err, userData) {
     if (err) {
       this.deferred.reject({reason: 'Authentication failed', error: err});
-    } else if (user) {
-      user.avatar_url = 'http://www.gravatar.com/avatar/' + user.md5_hash + '?s=80&d=mm';
-      this.deferred.resolve(user);
+    } else if (userData) {
+      this.deferred.resolve(new User(userData));
     } else {
       this.deferred.resolve();
     }
@@ -30,7 +32,7 @@ define([
   AuthService.prototype.initialize = function() {
     this.deferred = this.$q.defer();
     this.angularFireAuth.initialize(this.ref, {
-      scope: this.$rootScope,
+      scope: this.$rootScope.$new(),
       name: 'user',
       callback: _.bind(this.handleFireAuth, this)
     });

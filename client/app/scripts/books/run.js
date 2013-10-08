@@ -4,6 +4,7 @@ define(['app'], function(App) {
 
   App.run(function($rootScope, $location, AuthService) {
     AuthService.initialize().then(function(user) {
+      $rootScope.user = user;
       if (user && $location.url() === '/login') {
         $location.url('/');
       }
