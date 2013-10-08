@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": "auth.id.endsWith('@nulogy,com')",
+    ".write": "auth.id.endsWith('@nulogy,com')"
+  }
+}
