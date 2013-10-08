@@ -13,7 +13,8 @@ require({
     'angular-fire': '//cdn.firebase.com/libs/angularfire/0.3.0/angularfire',
     'bootstrap-dropdown': '../bower_components/bootstrap-sass/js/bootstrap-dropdown',
     'firebase': '//cdn.firebase.com/v0/firebase',
-    'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login'
+    'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login',
+    'persona-sdk': 'https://login.persona.org/include'
   },
   shim: {
     'lodash': {
@@ -47,6 +48,7 @@ require({
   'auth/controllers/login',
   'auth/controllers/logged_in_user',
   'auth/services/auth',
+  'auth/services/profile',
 
   // Books
   'app',

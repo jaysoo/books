@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Nulogy Book Club</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
 
@@ -15,25 +15,25 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body data-ng-cloak>
+  <body ng-cloak>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
           <div class="brand">
-            <a href="/">Books</a>
+            <a href="/">Nulogy Book Club</a>
           </div>
           <ul class="nav">
           </ul>
           <ul class="nav pull-right">
-            <li data-ng-controller="LoggedInUserCtrl" class="dropdown" data-ng-hide="!user">
+            <li ng-controller="LoggedInUserCtrl" class="dropdown" ng-hide="!user">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <img src="{{user.avatar_url}}" class="avatar"/>
-                {{user.displayName}}
+                <img ng-src="{{user.avatar_url}}" class="avatar"/>
+                {{user.email}}
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a data-ng-click="logout()">Logout</a>
+                  <a ng-click="logout()">Logout</a>
                 </li>
               </ul>
             </li>
@@ -42,8 +42,8 @@
       </div>
     </div>
 
-    <div id="wrapper" data-ng-class="{initialized: initialized}">
-      <div class="container" data-ng-view></div>
+    <div id="wrapper" ng-class="{initialized: initialized}">
+      <div class="container" ng-view></div>
     </div>
 
     <!-- build:js(.tmp) scripts/brick.js -->

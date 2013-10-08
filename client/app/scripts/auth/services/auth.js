@@ -3,7 +3,8 @@
 define([
   'lodash',
   'app',
-  'firebase'
+  'firebase',
+  'persona-sdk'
 
 ], function(_, App, Firebase) {
   App.service('AuthService', AuthService);
@@ -19,6 +20,7 @@ define([
     if (err) {
       this.deferred.reject({reason: 'Authentication failed', error: err});
     } else if (user) {
+      user.avatar_url = 'http://www.gravatar.com/avatar/' + user.md5_hash + '?s=80&d=mm';
       this.deferred.resolve(user);
     } else {
       this.deferred.resolve();
@@ -37,7 +39,7 @@ define([
 
   AuthService.prototype.login = function() {
     this.deferred = this.$q.defer();
-    this.angularFireAuth.login('github');
+    this.angularFireAuth.login('persona');
     return this.deferred.promise;
   };
 
