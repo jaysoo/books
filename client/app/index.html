@@ -16,14 +16,33 @@
     <!-- endbuild -->
   </head>
   <body data-ng-cloak>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="brand">
+            <a href="/">Books</a>
+          </div>
+          <ul class="nav">
+          </ul>
+          <ul class="nav pull-right">
+            <li data-ng-controller="LoggedInUserCtrl" class="dropdown" data-ng-hide="!user">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <img src="{{user.avatar_url}}" class="avatar"/>
+                {{user.displayName}}
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a data-ng-click="logout()">Logout</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <div id="wrapper" data-ng-class="{initialized: initialized}">
-      <div data-ng-controller="LoggedInUserCtrl">
-        <span data-ng-hide="!user">
-          Hi {{user.displayName}}!
-          <a data-ng-click="logout()">logout</a>
-        </span>
-      </div>
       <div class="container" data-ng-view></div>
     </div>
 

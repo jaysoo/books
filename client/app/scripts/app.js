@@ -6,7 +6,8 @@ define([
   'angular-cookies',
   'angular-resource',
   'angular-route',
-  'angular-fire'
+  'angular-fire',
+  'bootstrap-dropdown'
 ], function(angular) {
 
   return angular.module('app', [

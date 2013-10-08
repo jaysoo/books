@@ -17,7 +17,7 @@ define([
 
   AuthService.prototype.handleFireAuth = function(err, user) {
     if (err) {
-      this.deferred.reject(err);
+      this.deferred.reject({reason: 'Authentication failed', error: err});
     } else if (user) {
       this.deferred.resolve(user);
     } else {
