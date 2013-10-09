@@ -1,11 +1,11 @@
 'use strict';
 
-define(['helpers/model'], function(ModelHelpers) {
+define(['helpers/object'], function(ObjectHelpers) {
   function User(userData) {
-    ModelHelpers.setData(this, userData);
+    ObjectHelpers.setData(this, userData);
   }
 
-  ModelHelpers.extend(User, {
+  ObjectHelpers.extend(User, {
     avatarUrl: function() {
       return 'http://www.gravatar.com/avatar/' + this.md5_hash + '?s=80&d=mm';
     }
