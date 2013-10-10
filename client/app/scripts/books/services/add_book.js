@@ -8,20 +8,19 @@ define([
   'helpers/firebase'
 
 ], function(_, App, Firebase, FirebaseHelpers) {
-  App.service('AddBookService', AddBookService);
+  App.factory('AddBookService', AddBookService);
 
   function AddBookService($q) {
-    this.$q = $q;
-    this.ref = new Firebase('https://nulogy-books.firebaseio.com/books');
+    var ref = new Firebase('https://nulogy-books.firebaseio.com/books');
+
+    return {
+      add: function(book) {
+        var deferred = $q.defer();
+        ref.push(book, FirebaseHelpers.callbackFor(deferred));
+        return deferred.promise;
+      }
+    };
   }
-
-  AddBookService.prototype.add = function(book) {
-    var deferred = this.$q.defer();
-
-    this.ref.push(book, FirebaseHelpers.callbackFor(deferred));
-
-    return deferred.promise;
-  };
 
   return AddBookService;
 });

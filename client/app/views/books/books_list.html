@@ -1,9 +1,13 @@
 <ul class="books-list">
-  <li class="book add-book">
-    <a href="#/add-book">Add Book</a>
+  <li>
+    <div class="book add-book">
+      <a href="#/add-book">Add Book</a>
+    </div>
   </li>
 
-  <li class="book" data-ng-repeat="book in books">
-    {{ book.title }}
+  <li data-ng-repeat="book in books">
+    <div class="book">
+      {{ book.title }}
+    </div>
   </li>
 </ul>

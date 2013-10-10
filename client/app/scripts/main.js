@@ -41,21 +41,13 @@ require({
 }, [
   'angular',
 
-  // Routes
-  'routes',
-
-  // Authentication
-  'auth/controllers/login',
-  'auth/controllers/logged_in_user',
-  'auth/services/auth',
-  'auth/services/profile',
-
   // Books
-  'app',
-  'books/run',
   'books/controllers/add_book',
   'books/controllers/books_list',
-  'books/services/add_book'
+  'books/services/add_book',
+
+  // App
+  'app'
 
 ], function(angular) {
   return angular.bootstrap(document, ['app']);

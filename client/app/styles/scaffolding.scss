@@ -17,11 +17,3 @@ a {
 [data-ng-cloak] {
   display: none !important;
 }
-
-#wrapper {
-  display: none;
-
-  &.initialized {
-    display: block;
-  }
-}

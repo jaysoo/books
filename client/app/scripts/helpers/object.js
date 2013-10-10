@@ -8,11 +8,22 @@ define({
     }
   },
 
-  extend: function(Model, properties) {
+  include: function(Model, properties) {
     var propName;
 
     for (propName in properties) {
       Object.defineProperty(Model.prototype, propName, {
+        value: properties[propName],
+        enumerable: false
+      });
+    }
+  },
+
+  extend: function(Model, properties) {
+    var propName;
+
+    for (propName in properties) {
+      Object.defineProperty(Model, propName, {
         value: properties[propName],
         enumerable: false
       });
