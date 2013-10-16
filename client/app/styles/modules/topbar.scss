@@ -1,6 +1,10 @@
 #topbar {
   .brand {
     margin-left: 0;
+    font-size: $font-largest;
+    .brand-text {
+      display: none;
+    }
   }
 
   &.is-loading {

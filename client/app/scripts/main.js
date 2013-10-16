@@ -14,7 +14,8 @@ require({
     'bootstrap-dropdown': '../bower_components/bootstrap-sass/js/bootstrap-dropdown',
     'firebase': '//cdn.firebase.com/v0/firebase',
     'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login',
-    'persona-sdk': 'https://login.persona.org/include'
+    'persona-sdk': 'https://login.persona.org/include',
+    'dropbox': 'https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest'
   },
   shim: {
     'lodash': {
@@ -36,6 +37,9 @@ require({
     'firebase-simple-login': {
       deps: ['firebase'],
       exports: 'FirebaseSimpleLogin'
+    },
+    'dropbox': {
+      exports: 'Dropbox'
     }
   }
 }, [

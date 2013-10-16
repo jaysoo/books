@@ -2,10 +2,12 @@
 
 .books-list {
   $gutter: 10px;
-  $boxSize: 940px/3 - $gutter;
+  $boxWidth: 225px;
+  $boxHeight: 290px;
 
   list-style: none;
   overflow: hidden;
+  margin: 0;
 
   .book {
     box-sizing: border-box;
@@ -16,8 +18,8 @@
     margin: $gutter / 2;
     padding: 10px;
 
-    height: $boxSize - $gutter;
-    width: $boxSize - $gutter;
+    width: $boxWidth;
+    height: $boxHeight;
 
     &:hover {
       background-color: #eee;
@@ -26,7 +28,7 @@
     &.add-book {
       border-style: dashed;
       font-size: $font-largest;
-      padding-top: $boxSize/2 - $gutter/2 - $font-largest;
+      padding-top: $boxHeight/2 - $gutter/2 - $font-largest;
       text-align: center;
     }
   }
