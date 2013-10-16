@@ -1,6 +1,9 @@
 'use strict';
 
 define([
+  'lodash',
+  'config',
+
   'angular',
   'angular-animate',
   'angular-cookies',
@@ -15,7 +18,7 @@ define([
   'security/services/authorization',
   'security/services/security'
 
-], function(angular) {
+], function(_, config, angular) {
 
   var App = angular.module('app', [
     'ngAnimate',
@@ -28,6 +31,8 @@ define([
     'security.login.form',
     'security.login.toolbar',
   ]);
+
+  App.constant('Config', config);
 
   App.config(function($routeProvider) {
     $routeProvider

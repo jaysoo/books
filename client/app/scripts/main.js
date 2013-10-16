@@ -15,7 +15,7 @@ require({
     'firebase': '//cdn.firebase.com/v0/firebase',
     'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login',
     'persona-sdk': 'https://login.persona.org/include',
-    'dropbox': 'https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest'
+    'filepicker': '//api.filepicker.io/v1/filepicker'
   },
   shim: {
     'lodash': {
@@ -38,8 +38,8 @@ require({
       deps: ['firebase'],
       exports: 'FirebaseSimpleLogin'
     },
-    'dropbox': {
-      exports: 'Dropbox'
+    'filepicker': {
+      exports: 'filepicker'
     }
   }
 }, [
@@ -49,6 +49,7 @@ require({
   'books/controllers/add_book_ctrl',
   'books/controllers/books_list_ctrl',
   'books/services/add_book_service',
+  'books/services/upload_book_service',
 
   // App
   'app'

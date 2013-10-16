@@ -1,7 +1,10 @@
 'use strict';
 
-define(['app', 'firebase', 'common/helpers/firebase'], function(App, Firebase, FirebaseHelper) {
-  App.controller('AddBookCtrl', function ($scope, $location, AddBookService) {
+define(['app'], function(App) {
+
+  App.controller('AddBookCtrl', function ($scope, $location, AddBookService, UploadBookService) {
+    $scope.book = {};
+
     $scope.add = function() {
       AddBookService.add($scope.book).then(function() {
         $location.path('/');
@@ -9,8 +12,18 @@ define(['app', 'firebase', 'common/helpers/firebase'], function(App, Firebase, F
     };
 
     $scope.cancel = function() {
-      $scope.book = {};
       $location.path('/');
+    };
+
+    $scope.addAttachment = function() {
+      UploadBookService.upload().then(function(data) {
+        $scope.book.title = data.filename;
+        $scope.book.meta = data;
+      });
+    };
+
+    $scope.removeAttachment = function() {
+      delete $scope.book.meta;
     };
   });
 });

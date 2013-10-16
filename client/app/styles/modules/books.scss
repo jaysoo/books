@@ -12,6 +12,7 @@
   .book {
     box-sizing: border-box;
     float: left;
+    position: relative;
 
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -31,5 +32,58 @@
       padding-top: $boxHeight/2 - $gutter/2 - $font-largest;
       text-align: center;
     }
+  }
+
+  .book-title {
+    text-align: center;
+    font-weight: normal;
+    margin-top: 30px;
+    word-wrap: break-word;
+    font-size: $font-medium;
+    line-height: 1.5;
+  }
+
+  .book-author {
+    text-align: center;
+    font-weight: normal;
+    margin-top: 30px;
+    word-wrap: break-word;
+    font-size: $font-smaller;
+    color: $gray-light;
+  }
+
+  .book-attachment {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  }
+}
+
+.bookmark {
+  visibility: hidden;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: $font-larger;
+}
+
+.book:hover,
+.book.is-bookmarked {
+  .bookmark {
+    visibility: visible;
+  }
+}
+
+
+.add-book {
+  .inline-text,
+  .book-attachment-add,
+  .book-attachment-remove {
+    display: inline-block;
+    padding: 5px;
+  }
+
+  .book-attachment-remove {
+    color: $red;
   }
 }
