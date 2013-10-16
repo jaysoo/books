@@ -1,6 +1,6 @@
 'use strict';
 
-define(['helpers/object'], function(OH) {
+define(['common/helpers/object'], function(OH) {
   function User(userData) {
     OH.setData(this, userData);
   }

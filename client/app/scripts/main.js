@@ -42,9 +42,9 @@ require({
   'angular',
 
   // Books
-  'books/controllers/add_book',
-  'books/controllers/books_list',
-  'books/services/add_book',
+  'books/controllers/add_book_ctrl',
+  'books/controllers/books_list_ctrl',
+  'books/services/add_book_service',
 
   // App
   'app'

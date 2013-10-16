@@ -1,0 +1,11 @@
+#topbar {
+  .brand {
+    margin-left: 0;
+  }
+
+  &.is-loading {
+    .brand {
+      background: transparent url(../../images/loading.gif) no-repeat 0 50%;
+    }
+  }
+}

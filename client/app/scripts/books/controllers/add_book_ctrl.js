@@ -1,6 +1,6 @@
 'use strict';
 
-define(['app', 'firebase', 'helpers/firebase'], function(App, Firebase, FirebaseHelper) {
+define(['app', 'firebase', 'common/helpers/firebase'], function(App, Firebase, FirebaseHelper) {
   App.controller('AddBookCtrl', function ($scope, $location, AddBookService) {
     $scope.add = function() {
       AddBookService.add($scope.book).then(function() {

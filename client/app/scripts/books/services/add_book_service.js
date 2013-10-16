@@ -5,7 +5,7 @@ define([
   'app',
   'firebase',
 
-  'helpers/firebase'
+  'common/helpers/firebase'
 
 ], function(_, App, Firebase, FirebaseHelpers) {
   App.factory('AddBookService', AddBookService);
