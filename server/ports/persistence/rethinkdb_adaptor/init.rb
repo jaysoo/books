@@ -2,11 +2,13 @@ require 'rethinkdb'
 
 
 RDB_CONFIG = {
-  :host => ENV['RETHINK_HOST'] || 'localhost',
+  :host => ENV['RETHINKDB_HOST'] || 'localhost',
   :port => ENV['RETHINKDB_PORT'] || 28015,
   :authKey => ENV['RETHINKDB_AUTH'],
   :db   => ENV['RETHINKDB_DB']   || 'nulogy_books'
 }
+
+p ENV['RETHINKR']
 
 
 TABLES = ['users', 'books']
