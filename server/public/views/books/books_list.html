@@ -1,0 +1,25 @@
+<ul class="books-list">
+  <li>
+    <div class="book add-book">
+      <a href="#/add-book">
+        <i class="icon-plus-sign"></i>
+        Add Book
+      </a>
+    </div>
+  </li>
+
+  <li data-ng-repeat="book in books">
+    <article class="book" ng-class="{'is-bookmarked': book.isBookmarked}">
+      <a class="bookmark" ng-click="toggleBookmark(book)">
+        <i ng-class="{'icon-bookmark': book.isBookmarked, 'icon-bookmark-empty': !book.isBookmarked}"></i>
+      </a>
+
+      <h3 class="book-title">{{ book.title }}</h3>
+      <p class="book-author">{{ book.author }}</p>
+      <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
+        <i class="icon-cloud-download"></i>
+        download
+      </a>
+    </article>
+  </li>
+</ul>

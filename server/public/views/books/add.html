@@ -1,0 +1,46 @@
+<form class="form-horizontal add-book">
+  <div class="control-group">
+    <div class="control-group">
+      <label class="control-label">Title: </label>
+      <div class="controls">
+        <input type="text" ng-model="book.title" required />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Author: </label>
+      <div class="controls">
+        <input type="text" ng-model="book.author" required />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Attachment: </label>
+      <div class="controls">
+        <span ng-hide="book.meta">
+          <a class="inline-text" ng-click="addAttachment()">
+            <i class="icon-cloud-upload"></i>
+            Upload book
+          </a>
+        </span>
+        <span ng-show="book.meta">
+          <span class="book-attachment-add">
+            {{book.meta.filename}}
+          </span>
+          <a class="book-attachment-remove" ng-click="removeAttachment()">
+              <i class="icon-remove-sign"></i>
+          </span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <button class="btn btn-primary" ng-click="add()">
+          <i class="icon-plus-sign"></i>
+          Add Book
+        </button>
+        <button class="btn" ng-click="cancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</form>
