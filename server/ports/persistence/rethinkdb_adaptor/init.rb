@@ -2,21 +2,17 @@ require 'rethinkdb'
 
 
 RDB_CONFIG = {
-  :host => ENV['RETHINKDB_HOST'] || 'localhost',
-  :port => ENV['RETHINKDB_PORT'] || 28015,
-  :authKey => ENV['RETHINKDB_AUTH'],
-  :db   => ENV['RETHINKDB_DB'] || 'nulogy_books'
+  :host => ENV['RETHINKDB_HOST'],
+  :port => ENV['RETHINKDB_PORT'],
+  :auth_key => ENV['RETHINKDB_AUTH'],
+  :db   => 'nulogy_books'
 }
-
-p '#############'
-p ENV['RETHINKDB_HOST']
-p ENV['RETHINKDB_HOST']
-p ENV['RETHINKDB_HOST']
-p ENV['RETHINKDB_HOST']
 
 
 TABLES = ['users', 'books']
 
+
+p RDB_CONFIG
 
 r = RethinkDB::RQL.new
 
@@ -24,7 +20,7 @@ r = RethinkDB::RQL.new
 configure do
   set :db, RDB_CONFIG[:db]
 
-  connection = RethinkDB::Connection.new(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port])
+  connection = RethinkDB::Connection.new(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :auth_key => RDB_CONFIG[:auth_key])
 
   begin
     r.db_create(RDB_CONFIG[:db]).run(connection)
@@ -45,7 +41,7 @@ end
 module RethinkDbRepository
   def connection
     r = RethinkDB::RQL.new
-    r.connect(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :authKey => RDB_CONFIG[:authKey], :db => settings.db)
+    r.connect(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :auth_key => RDB_CONFIG[:auth_key], :db => settings.db)
   end
 end
 
