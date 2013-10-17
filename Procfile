@@ -1,3 +1,2 @@
 db: rethinkdb
-api: bundle exec rackup -p 9292 config.ru
-# nginx: nginx -c `pwd`/config/nginx.conf
+web: bundle exec rackup -p $PORT config.ru

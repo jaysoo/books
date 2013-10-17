@@ -12,8 +12,6 @@ RDB_CONFIG = {
 TABLES = ['users', 'books']
 
 
-p RDB_CONFIG
-
 r = RethinkDB::RQL.new
 
 
