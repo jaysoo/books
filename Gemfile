@@ -1,9 +1,12 @@
 source 'https://rubygems.org'
 
+gem 'rack'
 gem 'compass'
 gem 'haml'
-gem 'pry'
 gem 'rethinkdb'
 gem 'sinatra'
-gem 'thin'
 gem 'foreman'
+
+group :development do
+  gem 'pry'
+end

@@ -2,13 +2,14 @@ require 'rethinkdb'
 
 
 RDB_CONFIG = {
-  :host => ENV['RDB_HOST'] || 'localhost',
-  :port => ENV['RDB_PORT'] || 28015,
-  :db   => ENV['RDB_DB']   || 'books'
+  :host => ENV['RETHINK_HOST'] || 'localhost',
+  :port => ENV['RETHINKDB_PORT'] || 28015,
+  :authKey => ENV['RETHINKDB_AUTH'],
+  :db   => ENV['RETHINKDB_DB']   || 'nulogy_books'
 }
 
 
-TABLES = ['users']
+TABLES = ['users', 'books']
 
 
 r = RethinkDB::RQL.new
@@ -22,11 +23,11 @@ configure do
   begin
     r.db_create(RDB_CONFIG[:db]).run(connection)
 
-    TABLES.each do |tables|
+    TABLES.each do |table|
       r.db(RDB_CONFIG[:db]).table_create(table).run(connection)
     end
 
-  rescue RethinkDB::RqlRuntimeError => e
+  rescue RethinkDB::RqlRuntimeError
     puts "Database `books` and table `users` already exist."
 
   ensure
@@ -38,7 +39,7 @@ end
 module RethinkDbRepository
   def connection
     r = RethinkDB::RQL.new
-    r.connect(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :db => settings.db)
+    r.connect(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :authKey => RDB_CONFIG[:authKey], :db => settings.db)
   end
 end
 
