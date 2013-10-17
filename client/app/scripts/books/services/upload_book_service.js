@@ -6,7 +6,7 @@ define([
   'filepicker'
 
 ], function(_, App, filepicker) {
-  App.factory('UploadBookService', UploadBookService);
+  App.factory('UploadBookService', ['$q', 'Config', UploadBookService]);
 
   function UploadBookService($q, Config) {
     filepicker.setKey(Config.FILEPICKER_API_KEY);

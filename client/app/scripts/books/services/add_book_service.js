@@ -8,7 +8,7 @@ define([
   'common/helpers/firebase'
 
 ], function(_, App, Firebase, FirebaseHelpers) {
-  App.factory('AddBookService', AddBookService);
+  App.factory('AddBookService', ['$q', AddBookService]);
 
   function AddBookService($q) {
     var ref = new Firebase('https://nulogy-books.firebaseio.com/books');

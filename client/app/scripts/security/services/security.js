@@ -11,7 +11,7 @@ define([
 
 ], function(_, angular, Firebase, User) {
   angular.module('security', []);
-  angular.module('security').factory('SecurityService', SecurityService);
+  angular.module('security').factory('SecurityService', ['$rootScope', '$q', 'angularFireAuth', '$location', SecurityService]);
 
   function SecurityService($rootScope, $q, angularFireAuth, $location) {
     var ref = new Firebase('https://nulogy-books.firebaseio.com');

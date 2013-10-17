@@ -6,7 +6,7 @@ define([
 
 ], function(_, angular) {
   angular.module('security.authorization', ['security']);
-  angular.module('security.authorization').factory('AuthorizationService', AuthorizationService);
+  angular.module('security.authorization').factory('AuthorizationService', ['$q', 'SecurityService', AuthorizationService]);
 
   function AuthorizationService($q, SecurityService) {
     return {

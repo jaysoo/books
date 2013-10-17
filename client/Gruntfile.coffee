@@ -233,7 +233,7 @@ module.exports = (grunt) ->
           dot: true
           cwd: "<%= project.app %>"
           dest: "<%= project.dist %>"
-          src: ["*.{ico,png,txt}", ".htaccess", "bower_components/**/*", "images/{,*/}*.{gif,webp}", "styles/fonts/*"]
+          src: ["*.{ico,png,txt}", ".htaccess", "bower_components/**/*", "images/{,*/}*.{gif,webp}", "styles/fonts/*", "views/**/*"]
         ,
           expand: true
           cwd: ".tmp/images"
@@ -257,15 +257,6 @@ module.exports = (grunt) ->
         configFile: "karma.conf.js"
         singleRun: true
 
-    ngmin:
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= project.dist %>/scripts"
-          src: "*.js"
-          dest: "<%= project.dist %>/scripts"
-        ]
-
     uglify:
       dist:
         files:
@@ -276,5 +267,5 @@ module.exports = (grunt) ->
     grunt.task.run ["clean:server", "concurrent:server", "autoprefixer", "connect:livereload", "open", "watch"]
 
   grunt.registerTask "test", ["clean:server", "concurrent:test", "autoprefixer", "connect:test", "karma"]
-  grunt.registerTask "build", ["clean:dist", "useminPrepare", "concurrent:dist", "autoprefixer", "concat", "copy:dist", "ngmin", "cssmin", "requirejs", "rev", "usemin"]
+  grunt.registerTask "build", ["clean:dist", "useminPrepare", "concurrent:dist", "autoprefixer", "concat", "copy:dist", "cssmin", "requirejs", "rev", "usemin"]
   grunt.registerTask "default", ["jshint", "test", "build"]

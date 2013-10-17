@@ -2,6 +2,10 @@ require 'sinatra'
 
 
 class App < Sinatra::Application
+  set :root, File.dirname(__FILE__)
+  set :public_folder, '/var/www'
+  set :public_folder, Proc.new { File.join(root, "..", "client", "dist") }
+
   enable :sessions
 
   configure :production do

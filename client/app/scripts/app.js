@@ -34,7 +34,7 @@ define([
 
   App.constant('Config', config);
 
-  App.config(function($routeProvider) {
+  App.config(['$routeProvider', function($routeProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'views/security/login-form.html',
@@ -56,9 +56,9 @@ define([
       .otherwise({
         redirectTo: '/'
       });
-  });
+  }]);
 
-  App.run(function($rootScope, $location, SecurityService) {
+  App.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
     SecurityService.requestCurrentUser().then(function() {
       $rootScope.$on('$routeChangeStart', function(evt, next) {
         if (!SecurityService.currentUser().isAuthenticated()) {
@@ -68,15 +68,15 @@ define([
         }
       });
     });
-  });
+  }]);
 
-  App.run(function($rootScope, $location) {
+  App.run(['$rootScope', '$location', function($rootScope, $location) {
     $rootScope.$on('$routeChangeError', function(ev, current, previous, rejection){
       if(rejection === 'Not Authorized'){
         $location.path('/login');
       }
     });
-  });
+  }]);
 
   return App;
 });
