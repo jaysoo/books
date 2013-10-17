@@ -5,10 +5,14 @@ RDB_CONFIG = {
   :host => ENV['RETHINKDB_HOST'] || 'localhost',
   :port => ENV['RETHINKDB_PORT'] || 28015,
   :authKey => ENV['RETHINKDB_AUTH'],
-  :db   => ENV['RETHINKDB_DB']   || 'nulogy_books'
+  :db   => ENV['RETHINKDB_DB'] || 'nulogy_books'
 }
 
-p ENV['RETHINKR']
+p '#############'
+p ENV['RETHINKDB_HOST']
+p ENV['RETHINKDB_HOST']
+p ENV['RETHINKDB_HOST']
+p ENV['RETHINKDB_HOST']
 
 
 TABLES = ['users', 'books']
