@@ -220,7 +220,7 @@ module.exports = (grunt) ->
           mainConfigFile: '<%= project.app %>/scripts/main.js'
           stubModules: ['cs', 'text']
           out: '<%= project.dist %>/scripts/main.js'
-          optimize: 'uglify2'
+          optimize: 'none'
           preserveLicenseComments: false
           generateSourceMaps: true
           name: 'main'

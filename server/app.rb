@@ -16,6 +16,10 @@ class App < Sinatra::Application
     include Rack::Utils
     alias_method :h, :escape_html
   end
+
+  get '/' do
+      File.read(File.join(File.dirname(__FILE__), 'public', 'index.html'))
+  end
 end
 
 
