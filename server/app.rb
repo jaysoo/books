@@ -2,22 +2,20 @@ require 'sinatra'
 
 
 class App < Sinatra::Application
-  enable :sessions, :logging
-
   configure :production do
   end
 
-  configure :development do
-    puts "In development mode"
+  # configure :development do
+  #   puts "In development mode"
 
-    set :root, File.dirname(__FILE__)
+  #   set :root, File.dirname(__FILE__)
 
-    set :public_folder, Proc.new { File.join(root, "..", "client", "app") }
+  #   set :public_folder, Proc.new { File.join(root, "..", "client", "app") }
 
-    get "/styles/:file" do |file|
-      send_file File.join(settings.root, "..", ".tmp", "styles", file)
-    end
-  end
+  #   get "/styles/:file" do |file|
+  #     send_file File.join(settings.root, "..", ".tmp", "styles", file)
+  #   end
+  # end
 
   helpers do
     include Rack::Utils
