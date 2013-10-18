@@ -1,0 +1,12 @@
+<ul class="books-list bookmarks">
+  <li data-ng-repeat="book in books">
+    <article class="book">
+      <h3 class="book-title">{{ book.title }}</h3>
+      <p class="book-author">{{ book.author }}</p>
+      <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
+        <i class="icon-cloud-download"></i>
+        download
+      </a>
+    </article>
+  </li>
+</ul>

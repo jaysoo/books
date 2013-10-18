@@ -10,8 +10,12 @@
 
   <li data-ng-repeat="book in books">
     <article class="book" ng-class="{'is-bookmarked': book.isBookmarked}">
-      <a class="bookmark" ng-click="toggleBookmark(book)">
-        <i ng-class="{'icon-bookmark': book.isBookmarked, 'icon-bookmark-empty': !book.isBookmarked}"></i>
+      <a class="bookmark" ng-click="addBookmark(currentUser, book)" ng-hide="book.isBookmarked">
+        <i class="icon-bookmark-empty"></i>
+      </a>
+
+      <a class="bookmark" ng-click="removeBookmark(currentUser, book)" ng-show="book.isBookmarked">
+        <i class="icon-bookmark"></i>
       </a>
 
       <h3 class="book-title">{{ book.title }}</h3>
