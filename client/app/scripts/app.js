@@ -18,7 +18,7 @@ define([
   // Security
   'security/controllers/login-form',
   'security/services/authorization',
-  'security/services/security'
+  'security/services/auth0-security'
 
 ], function(_, config, AppCtrl, angular) {
 
@@ -59,6 +59,16 @@ define([
       .otherwise({
         redirectTo: '/'
       });
+  }]);
+
+  app.config(['SecurityServiceProvider', function(SecurityServiceProvider) {
+    var accessTokenMatch = /access_token=([^&]*)/g.exec(window.location.hash);
+    var accessToken;
+    if (accessTokenMatch) {
+      accessToken = accessTokenMatch[1];
+      console.log(accessToken);
+      SecurityServiceProvider.setAccessToken(accessToken);
+    }
   }]);
 
   app.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {

@@ -7,7 +7,7 @@ define(['common/helpers/object'], function(OH) {
 
   var props = {
     avatarUrl: function() {
-      return 'http://www.gravatar.com/avatar/' + this.md5_hash + '?s=200&d=mm';
+      return this.picture;
     },
 
     isAuthenticated: function() {
@@ -21,6 +21,10 @@ define(['common/helpers/object'], function(OH) {
       return {
         isAuthenticated: function() {
           return false;
+        },
+
+        avatarUrl: function() {
+          return '';
         }
       };
     }
