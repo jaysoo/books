@@ -14,12 +14,6 @@ TABLES = ['users', 'books']
 
 r = RethinkDB::RQL.new
 
-puts "##############"
-puts "##############"
-puts "##############"
-puts "##############"
-puts RDB_CONFIG
-
 
 configure do
   set :db, RDB_CONFIG[:db]

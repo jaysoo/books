@@ -24,9 +24,9 @@ class App < Sinatra::Application
     alias_method :h, :escape_html
   end
 
-  get '/' do
-    redirect '/index.html'
-  end
+  # get '/' do
+  #   redirect '/index.html'
+  # end
 end
 
 
