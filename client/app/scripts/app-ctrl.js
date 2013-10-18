@@ -1,7 +1,7 @@
 'use strict';
 
 define(function() {
-  return ['$scope', 'SecurityService', function($scope, SecurityService) {
+  return ['$scope', '$location', 'SecurityService', function($scope, $location, SecurityService) {
     $scope.isAuthenticated = SecurityService.isAuthenticated;
 
     $scope.sidebarIsShown = false;
@@ -16,6 +16,14 @@ define(function() {
 
     $scope.closeSidebar = function() {
       $scope.sidebarIsShown = false;
+    };
+
+    $scope.showBooks = function() {
+      $location.path('/');
+    };
+
+    $scope.showBookmarks = function() {
+      $location.path('/bookmarks');
     };
 
     $scope.$watch(function() {

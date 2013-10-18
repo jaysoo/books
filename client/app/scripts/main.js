@@ -47,7 +47,9 @@ require({
 
   // Books
   'books/controllers/add_book_ctrl',
+  'books/controllers/bookmarks_ctrl',
   'books/controllers/books_list_ctrl',
+  'books/repositories/books_repository',
   'books/services/add_book_service',
   'books/services/bookmarks_service',
   'books/services/upload_book_service',

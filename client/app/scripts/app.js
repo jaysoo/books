@@ -52,6 +52,10 @@ define([
         templateUrl: 'views/books/books_list.html',
         controller: 'BooksListCtrl'
       })
+      .when('/bookmarks', {
+        templateUrl: 'views/books/bookmarks.html',
+        controller: 'BookmarksCtrl'
+      })
       .when('/add-book', {
         templateUrl: 'views/books/add.html',
         controller: 'AddBookCtrl'
