@@ -8,10 +8,17 @@ define(['angular'], function(angular) {
 
     $scope.sidebarIsShown = false;
 
-    $scope.showSidebar = function() {
+    $scope.toggleSidebar = function() {
       $scope.sidebarIsShown = !$scope.sidebarIsShown;
     };
 
+    $scope.showSidebar = function() {
+      $scope.sidebarIsShown = true;
+    };
+
+    $scope.closeSidebar = function() {
+      $scope.sidebarIsShown = false;
+    };
 
     $scope.$watch(function() {
       return SecurityService.currentUser();

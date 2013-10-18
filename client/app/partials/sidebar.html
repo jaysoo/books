@@ -1,8 +1,24 @@
 <ul ng-show="isAuthenticated()">
-  <li class="email">
-    {{currentUser.email}}
+  <li>
+    <a ng-click="closeSidebar()" class="sidebar-close">
+      <i class="icon-double-angle-left"></i>
+      Close
+    </a>
   </li>
   <li>
-    <a ng-click="logout()">Logout</a>
+    <a ng-click="showSettings()">
+      <i class="icon-cog"></i>
+      Settings
+    </a>
+  </li>
+  <li>
+    <a ng-click="showBookmarks()">
+      <i class="icon-bookmark"></i>
+      Bookmarks
+    </a>
+    <a ng-click="logout()">
+      <i class="icon-signout"></i>
+      Logout
+    </a>
   </li>
 </ul>

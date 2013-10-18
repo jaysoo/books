@@ -2,12 +2,11 @@
 
 #sidebar {
   position: fixed;
-  right: -23px;
+  right: -3px;
   top: 0;
 
   border-right: 3px solid $gray-darkest;
   height: 100%;
-  padding: 10px;
   width: 0;
   z-index: 1040;
 
@@ -22,11 +21,29 @@
   ul {
     list-style: none;
     margin: 0;
-    padding: 0 23px 0 0;
+    padding: 0 3px 0 0;
+    user-select: none;
 
-    li {
-      padding: 0;
+    a {
+      display: block;
+      line-height: $font-large;
       margin: 0;
+      padding: $font-large;
+      vertical-align: middle;
+
+      color: $white;
+      font-size: $font-large;
+
+      white-space: nowrap;
+
+      &.sidebar-close {
+        line-height: $font-medium;
+        font-size: $font-medium;
+      }
+
+      &:hover {
+        background-color: $gray-darkest;
+      }
     }
   }
 
