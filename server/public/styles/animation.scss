@@ -1,8 +1,0 @@
-[data-ng-view].ng-enter {
-   transition: .3s linear all;
-   opacity: 0;
-}
- 
-[data-ng-view].ng-enter.ng-enter-active {
- opacity: 1;
-}

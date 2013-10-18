@@ -2,14 +2,21 @@ require 'sinatra'
 
 
 class App < Sinatra::Application
-  enable :sessions
+  enable :sessions, :logging
+
+  set :root, File.dirname(__FILE__)
 
   configure :production do
-    set :haml, { :ugly=>true }
-    set :clean_trace, true
   end
 
   configure :development do
+    puts "In development mode"
+
+    set :public_folder, Proc.new { File.join(root, "..", "client", "app") }
+
+    get "/styles/:file" do |file|
+      send_file File.join(settings.root, "..", ".tmp", "styles", file)
+    end
   end
 
   helpers do
@@ -18,7 +25,7 @@ class App < Sinatra::Application
   end
 
   get '/' do
-    File.read(File.join(File.dirname(__FILE__), 'public', 'index.html'))
+    redirect '/index.html'
   end
 end
 
