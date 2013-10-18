@@ -4,13 +4,13 @@ require 'sinatra'
 class App < Sinatra::Application
   enable :sessions, :logging
 
-  set :root, File.dirname(__FILE__)
-
   configure :production do
   end
 
   configure :development do
     puts "In development mode"
+
+    set :root, File.dirname(__FILE__)
 
     set :public_folder, Proc.new { File.join(root, "..", "client", "app") }
 
