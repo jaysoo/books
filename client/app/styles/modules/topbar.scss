@@ -1,7 +1,17 @@
+@import "variables";
+
 #topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  transition: all 300ms ease-in-out;
+
   .brand {
     margin-left: 0;
-    font-size: $font-largest;
+    font-size: 40px;
     .brand-text {
       display: none;
     }
@@ -11,5 +21,16 @@
     .brand {
       background: transparent url(../../images/loading.gif) no-repeat 0 50%;
     }
+  }
+
+  &.sidebar-is-shown {
+    width: 80%
+  }
+
+  .avatar {
+    width: 50px;
+    margin-right: 3px;
+    border-radius: 50%;
+    border: 1px solid $gray-light;
   }
 }

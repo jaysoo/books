@@ -36337,18 +36337,31 @@ define('security/controllers/login-form',['angular'], function(angular) {
 
 
 
-define('security/controllers/current-user-toolbar',['angular'], function(angular) {
-  angular.module('security.login.toolbar', ['security']);
-  angular.module('security.login.toolbar')
-    .controller('CurrentUserToolbarCtrl', ['$scope', 'SecurityService', function($scope, SecurityService) {
-      $scope.isAuthenticated = SecurityService.isAuthenticated;
-      $scope.$watch(function() {
-        return SecurityService.currentUser();
-      }, function(currentUser) {
-        $scope.currentUser = currentUser;
+define('security/controllers/current-user',['angular'], function(angular) {
+  var module = angular.module('security.login.currentuser', ['security']);
+
+  module.controller('CurrentUserCtrl', ['$scope', 'SecurityService', function($scope, SecurityService) {
+    $scope.isAuthenticated = SecurityService.isAuthenticated;
+
+    $scope.sidebarIsShown = false;
+
+    $scope.showSidebar = function() {
+      $scope.sidebarIsShown = !$scope.sidebarIsShown;
+    };
+
+
+    $scope.$watch(function() {
+      return SecurityService.currentUser();
+    }, function(currentUser) {
+      $scope.currentUser = currentUser;
+    });
+
+    $scope.logout = function() {
+      SecurityService.logout().then(function() {
+        $scope.sidebarIsShown = false;
       });
-      $scope.logout = SecurityService.logout;
-    }]);
+    }
+  }]);
 });
 
 
@@ -36418,7 +36431,7 @@ define('security/user',['common/helpers/object'], function(OH) {
 
   var props = {
     avatarUrl: function() {
-      return 'http://www.gravatar.com/avatar/' + this.md5_hash + '?s=80&d=mm';
+      return 'http://www.gravatar.com/avatar/' + this.md5_hash + '?s=200&d=mm';
     },
 
     isAuthenticated: function() {
@@ -36526,7 +36539,7 @@ define('app',[
 
   // Security
   'security/controllers/login-form',
-  'security/controllers/current-user-toolbar',
+  'security/controllers/current-user',
   'security/services/authorization',
   'security/services/security'
 
@@ -36541,7 +36554,7 @@ define('app',[
     'security',
     'security.authorization',
     'security.login.form',
-    'security.login.toolbar',
+    'security.login.currentuser',
   ]);
 
   App.constant('Config', config);

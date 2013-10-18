@@ -1,4 +1,19 @@
 #wrapper {
-  margin-top: 50px;
-  padding-top: 30px;
+}
+
+#wrapper-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  padding-top: 100px;
+  width: 100%;
+
+  overflow: auto;
+
+  transition: all 300ms ease-in-out;
+
+  &.sidebar-is-shown {
+    width: 80%
+  }
 }

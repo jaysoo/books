@@ -10,45 +10,26 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="styles/3e36599b.styles.css">
+    <link rel="stylesheet" href="styles/77d0d9aa.styles.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   </head>
   <body ng-cloak="">
-    <div id="topbar" class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="brand">
-            <a href="/">
-              <i class="icon-home"></i>
-              <span class="brand-text">Nulogy Book Club</span>
-            </a>
-          </div>
-          <ul class="nav">
-          </ul>
-          <ul class="nav pull-right" ng-controller="CurrentUserToolbarCtrl">
-            <li class="dropdown" ng-show="isAuthenticated()">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <img ng-src="{{currentUser.avatarUrl()}}" class="avatar">
-                {{currentUser.email}}
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a ng-click="logout()">Logout</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+
+    <div id="wrapper" ng-controller="CurrentUserCtrl">
+      <div id="wrapper-inner" ng-class="{'sidebar-is-shown': sidebarIsShown}">
+        <div class="container" ng-view=""></div>
+        <div id="topbar" class="navbar navbar-fixed-top" ng-class="{'sidebar-is-shown': sidebarIsShown}">
+          <ng-include src="'partials/topbar.html'"></ng-include>
         </div>
       </div>
-    </div>
 
-    <div id="wrapper">
-      <div class="container" ng-view=""></div>
+      <div id="sidebar" ng-class="{'is-shown': sidebarIsShown}">
+        <ng-include src="'partials/sidebar.html'"></ng-include>
+      </div>
     </div>
 
     <script src="scripts/d41d8cd9.brick.js"></script>
 
-    <script data-main="scripts/30098fbb.main" src="bower_components/requirejs/require.js"></script>
+    <script data-main="scripts/1664af1d.main" src="bower_components/requirejs/require.js"></script>
   </body>
 </html>

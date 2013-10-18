@@ -14,7 +14,7 @@ define([
 
   // Security
   'security/controllers/login-form',
-  'security/controllers/current-user-toolbar',
+  'security/controllers/current-user',
   'security/services/authorization',
   'security/services/security'
 
@@ -29,7 +29,7 @@ define([
     'security',
     'security.authorization',
     'security.login.form',
-    'security.login.toolbar',
+    'security.login.currentuser',
   ]);
 
   App.constant('Config', config);
