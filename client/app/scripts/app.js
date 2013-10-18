@@ -2,7 +2,10 @@
 
 define([
   'lodash',
+
+  // App
   'config',
+  'app-ctrl',
 
   'angular',
   'angular-animate',
@@ -14,13 +17,12 @@ define([
 
   // Security
   'security/controllers/login-form',
-  'security/controllers/current-user',
   'security/services/authorization',
   'security/services/security'
 
-], function(_, config, angular) {
+], function(_, config, AppCtrl, angular) {
 
-  var App = angular.module('app', [
+  var app = angular.module('app', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -28,13 +30,14 @@ define([
     'firebase',
     'security',
     'security.authorization',
-    'security.login.form',
-    'security.login.currentuser',
+    'security.login.form'
   ]);
 
-  App.constant('Config', config);
+  app.constant('Config', config);
 
-  App.config(['$routeProvider', function($routeProvider) {
+  app.controller('AppCtrl', AppCtrl);
+
+  app.config(['$routeProvider', function($routeProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'views/security/login-form.html',
@@ -58,7 +61,7 @@ define([
       });
   }]);
 
-  App.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
+  app.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
     SecurityService.requestCurrentUser().then(function() {
       $rootScope.$on('$routeChangeStart', function(evt, next) {
         if (!SecurityService.currentUser().isAuthenticated()) {
@@ -70,7 +73,7 @@ define([
     });
   }]);
 
-  App.run(['$rootScope', '$location', function($rootScope, $location) {
+  app.run(['$rootScope', '$location', function($rootScope, $location) {
     $rootScope.$on('$routeChangeError', function(ev, current, previous, rejection){
       if(rejection === 'Not Authorized'){
         $location.path('/login');
@@ -78,5 +81,5 @@ define([
     });
   }]);
 
-  return App;
+  return app;
 });

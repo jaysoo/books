@@ -1,9 +1,7 @@
 'use strict';
 
-define(['angular'], function(angular) {
-  var module = angular.module('security.login.currentuser', ['security']);
-
-  module.controller('CurrentUserCtrl', ['$scope', 'SecurityService', function($scope, SecurityService) {
+define(function() {
+  return ['$scope', 'SecurityService', function($scope, SecurityService) {
     $scope.isAuthenticated = SecurityService.isAuthenticated;
 
     $scope.sidebarIsShown = false;
@@ -30,6 +28,6 @@ define(['angular'], function(angular) {
       SecurityService.logout().then(function() {
         $scope.sidebarIsShown = false;
       });
-    }
-  }]);
+    };
+  }];
 });
