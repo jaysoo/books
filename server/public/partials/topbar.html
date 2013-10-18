@@ -1,0 +1,17 @@
+<div class="content">
+  <div class="navbar-inner">
+    <div class="brand">
+      <a href="/">
+        <i class="icon-home"></i>
+        <span class="brand-text">Nulogy Book Club</span>
+      </a>
+    </div>
+    <ul class="nav pull-right">
+      <li ng-show="isAuthenticated()">
+        <a class="dropdown-toggle" data-toggle="dropdown" ng-click="toggleSidebar()">
+          <img ng-src="{{currentUser.avatarUrl()}}" class="avatar"/>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
