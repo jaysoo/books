@@ -233,7 +233,7 @@ module.exports = (grunt) ->
           dot: true
           cwd: "<%= project.app %>"
           dest: "<%= project.dist %>"
-          src: ["*.{ico,png,txt}", ".htaccess", "bower_components/**/*", "images/{,*/}*.{gif,webp}", "styles/fonts/*", "views/**/*"]
+          src: ["*.{ico,png,txt}", ".htaccess", "bower_components/**/*", "images/{,*/}*.{gif,webp}", "fonts/**/*", "views/**/*"]
         ,
           expand: true
           cwd: ".tmp/images"

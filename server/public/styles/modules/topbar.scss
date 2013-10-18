@@ -1,0 +1,15 @@
+#topbar {
+  .brand {
+    margin-left: 0;
+    font-size: $font-largest;
+    .brand-text {
+      display: none;
+    }
+  }
+
+  &.is-loading {
+    .brand {
+      background: transparent url(../../images/loading.gif) no-repeat 0 50%;
+    }
+  }
+}
