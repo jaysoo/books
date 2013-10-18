@@ -6,6 +6,10 @@ define(['common/helpers/object'], function(OH) {
   }
 
   var props = {
+    id: function() {
+      return this.user_id;
+    },
+
     avatarUrl: function() {
       return this.picture;
     },
@@ -21,6 +25,10 @@ define(['common/helpers/object'], function(OH) {
       return {
         isAuthenticated: function() {
           return false;
+        },
+
+        id: function() {
+          return null;
         },
 
         avatarUrl: function() {

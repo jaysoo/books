@@ -1,14 +1,13 @@
 'use strict';
 
 define(['angular'], function(angular) {
-  angular.module('security.login.form', ['security']);
-  angular.module('security.login.form')
-    .controller('LoginFormCtrl', ['$scope', 'SecurityService', function ($scope, SecurityService) {
-      $scope.$watch(function() {
-        return SecurityService.currentUser();
-      }, function(currentUser) {
-        $scope.currentUser = currentUser;
-      });
-      $scope.login = SecurityService.login;
-    }]);
+  var module = angular.module('security.login.form', ['security']);
+  module.controller('LoginFormCtrl', ['$scope', 'SecurityService', function ($scope, SecurityService) {
+    $scope.$watch(function() {
+      return SecurityService.currentUser();
+    }, function(currentUser) {
+      $scope.currentUser = currentUser;
+    });
+    $scope.login = SecurityService.login;
+  }]);
 });
