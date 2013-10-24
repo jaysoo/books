@@ -18,7 +18,7 @@ define([
   // Security
   'security/controllers/login-form',
   'security/services/authorization',
-  'security/services/auth0-security'
+  'security/auth0/security'
 
 ], function(_, config, AppCtrl, angular) {
 

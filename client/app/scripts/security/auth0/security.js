@@ -4,7 +4,7 @@
 define([
   'lodash',
   'angular',
-  '../user'
+  './user'
 
 ], function(_, angular, User) {
   var module = angular.module('security', []);
