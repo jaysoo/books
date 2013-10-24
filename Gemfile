@@ -8,7 +8,7 @@ gem "sinatra"
 gem "sinatra-contrib"
 gem "auth0"
 gem "omniauth"
-gem "omniauth-gplus"
+gem "firebase_token_generator"
 
 group :development do
   gem "pry"

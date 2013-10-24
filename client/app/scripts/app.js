@@ -66,11 +66,10 @@ define([
   }]);
 
   app.config(['SecurityServiceProvider', function(SecurityServiceProvider) {
-    var accessTokenMatch = /accessToken=([^&]*)/g.exec(window.location.hash);
+    var accessTokenMatch = /access_token=([^&]*)/g.exec(window.location.hash);
     var accessToken;
     if (accessTokenMatch) {
       accessToken = accessTokenMatch[1];
-      console.log(accessToken);
       SecurityServiceProvider.setAccessToken(accessToken);
     }
   }]);

@@ -6,18 +6,15 @@ define(['common/helpers/object'], function(OH) {
   }
 
   var props = {
-    id: function() {
-      return this.user_id;
-    },
-
     avatarUrl: function() {
-      return this.picture;
+      return this.image;
     },
 
     isAuthenticated: function() {
       return true;
     }
   };
+
   OH.include(User, props);
 
   OH.extend(User, {

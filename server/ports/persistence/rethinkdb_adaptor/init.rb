@@ -21,14 +21,18 @@ configure do
   connection = RethinkDB::Connection.new(:host => RDB_CONFIG[:host], :port => RDB_CONFIG[:port], :auth_key => RDB_CONFIG[:auth_key])
 
   begin
-    r.db_create(RDB_CONFIG[:db]).run(connection)
-
-    TABLES.each do |table|
-      r.db(RDB_CONFIG[:db]).table_create(table).run(connection)
+    begin
+      r.db_create(RDB_CONFIG[:db]).run(connection)
+    rescue RethinkDB::RqlRuntimeError
     end
 
-  rescue RethinkDB::RqlRuntimeError
-    puts "Database `books` and table `users` already exist."
+    TABLES.each do |table|
+      begin
+        r.db(RDB_CONFIG[:db]).table_create(table).run(connection)
+      rescue RethinkDB::RqlRuntimeError
+        puts "Database `#{table}` already exists."
+      end
+    end
 
   ensure
     connection.close
@@ -45,3 +49,4 @@ end
 
 
 require_relative 'user_repository'
+require_relative 'books_repository'
