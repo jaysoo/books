@@ -45,5 +45,4 @@ end
 
 
 require_relative "domain/init"
-# require_relative "ports/persistence/rethinkdb_adaptor/init"
 require_relative "routes"
