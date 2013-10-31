@@ -1,19 +1,21 @@
 'use strict';
 
 define(['lodash', 'app'], function(_, App) {
-  App.factory('BooksRepository', ['$http', function($http) {
-    var url = '/books';
+  App.factory('BooksRepository', ['$resource', function($resource) {
+    var Book = $resource('/books/:id', {
+      id: '@id'
+    });
 
     return {
       list: function() {
-        $http.get(url);
+        return Book.query();
       },
 
-      create: function(book) {
-        $http.post(url, book);
+      create: function(bookData) {
+        var book = new Book(bookData);
+        return book.$save();
       }
     };
   }]);
 });
-
 

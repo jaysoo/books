@@ -10,7 +10,9 @@ module BooksRepository
   extend self
 
   def all
-    r.table(TABLE).order_by(:id).run(connection)
+    books = []
+    r.table(TABLE).order_by(:id).run(connection).each{|book| books << book}
+    books
   end
 
   def get id

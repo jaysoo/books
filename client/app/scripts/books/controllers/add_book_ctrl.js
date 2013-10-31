@@ -2,14 +2,13 @@
 
 define(['app'], function(App) {
 
-  App.controller('AddBookCtrl', ['$scope', '$location', 'AddBookService', 'UploadBookService',
-    function($scope, $location, AddBookService, UploadBookService) {
+  App.controller('AddBookCtrl', ['$scope', '$location', 'BooksRepository', 'UploadBookService',
+    function($scope, $location, BooksRepository, UploadBookService) {
       $scope.book = {};
 
       $scope.add = function() {
-        AddBookService.add($scope.book).then(function() {
-          $location.path('/');
-        });
+        BooksRepository.create($scope.book);
+        $location.path('/');
       };
 
       $scope.cancel = function() {
