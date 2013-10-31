@@ -8,6 +8,8 @@ RDB_CONFIG = {
   :db   => 'nulogy_books'
 }
 
+puts RDB_CONFIG
+
 
 TABLES = ['users', 'books']
 
