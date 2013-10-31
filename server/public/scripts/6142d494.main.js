@@ -36952,8 +36952,22 @@ define('books/services/upload_book_service',[
 
 
 define('sessions/sessions_ctrl',['lodash', 'app', 'firebase'], function(_, App, Firebase) {
-  App.controller('SessionsCtrl', ['$scope', 'SessionsRepository', 'VotesRepository', 'BooksRepository',
-    function($scope, SessionsRepository, VotesRepository, BooksRepository) {
+  App.controller('SessionsCtrl', ['$scope', 'SessionsRepository', 'VotesRepository', 'BooksRepository', 'SecurityService',
+    function($scope, SessionsRepository, VotesRepository, BooksRepository, SecurityService) {
+      var votesRef = new Firebase('https://nulogy-books.firebaseio.com/votes');
+      var lastEventName = sessionStorage.getItem('events:votes:last');
+
+      if (lastEventName) {
+        votesRef = votesRef.startAt(lastEventName);
+      }
+
+      votesRef.on('child_added', function(snap) {
+        var name = snap.name();
+        var ev = snap.val();
+        sessionStorage.setItem('events:votes:last', name);
+        handleVoteEvent(ev);
+      });
+
       $scope.voted = {};
 
       $scope.addSession = function() {
@@ -37025,6 +37039,12 @@ define('sessions/sessions_ctrl',['lodash', 'app', 'firebase'], function(_, App, 
 
       function ensureBookCount(book) {
         $scope.votesByBookId[book.id] = $scope.votesByBookId[book.id] || 0;
+      }
+
+      function handleVoteEvent(ev) {
+        if (ev.session_id === $scope.currentSession.id && ev.user_id !== SecurityService.currentUser().id) {
+          console.log('new vote', ev);
+        }
       }
     }
   ]);
