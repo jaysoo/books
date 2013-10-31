@@ -8,10 +8,8 @@ class App < Sinatra::Application
    end
 
    put "/favourites/:user_id/:book_id" do
-     data = fav_data(params)
-     fav = Favourite.new(data)
-     fav.upsert
-     json data
+     fav = Favourite.find_or_create_by(fav_data(params))
+     json fav
    end
 
    delete "/favourites/:user_id/:book_id" do

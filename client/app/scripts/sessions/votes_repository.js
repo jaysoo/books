@@ -22,11 +22,14 @@ define(['lodash', 'app'], function(_, App) {
       return {
         list: function(session) {
           var deferred = $q.defer();
-          Vote.query(function(votes) {
-            deferred.resolve(votes);
-          }, {
+
+          Vote.query({
             session_id: session.id
+
+          }, function(votes) {
+            deferred.resolve(votes);
           });
+
           return deferred.promise;
         },
 

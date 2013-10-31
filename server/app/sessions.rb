@@ -28,15 +28,14 @@ class App < Sinatra::Application
    end
 
    put "/sessions/:session_id/votes/:book_id/:user_id" do
-     data = vote_data(params)
-     vote = Vote.new(data)
-     vote.upsert
-     json data
+     vote = Vote.find_or_create_by(vote_data(params))
+     json vote
    end
 
    delete "/sessions/:session_id/votes/:book_id/:user_id" do
-     session = Session.where(session_data(params)).first
-     session.delete if session
+     vote = Vote.where(vote_data(params)).first
+     binding.pry
+     vote.delete if vote
      status 204
      json ''
    end
@@ -47,7 +46,7 @@ class App < Sinatra::Application
      {
        session_id: params[:session_id],
        book_id: params[:book_id],
-       user_id: params{:user_id}
+       user_id: params[:user_id]
      }
    end
 end

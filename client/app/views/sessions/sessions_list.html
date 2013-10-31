@@ -15,7 +15,20 @@
   <h3>Book Votes</h3>
   <ul>
     <li ng-repeat="book in books">
-      {{book.title}} ({{book.author}})
+      <p>
+        {{book.title}} &mdash; {{book.author}}
+        <span ng-show="voted[book.id]">
+          <a ng-click="removeVoteFor(currentSession, book, currentUser)">
+            <i class="fa fa-check-square-o"></i>
+          </a>
+        </span>
+        <span ng-hide="voted[book.id]">
+          <a ng-click="voteFor(currentSession, book, currentUser)">
+            <i class="fa fa-square-o"></i>
+          </a>
+        </span>
+      </p>
+      <p class="vote-count">Current votes: {{votesByBookId[book.id] || 0}}</p>
     </li>
   </ul>
 </div>
