@@ -49,13 +49,14 @@ require({
   'books/controllers/add_book_ctrl',
   'books/controllers/books_list_ctrl',
   'books/controllers/favourites_ctrl',
-
   'books/repositories/books_repository',
   'books/repositories/favourites_repository',
-
   'books/services/upload_book_service',
 
-  // App
+  'sessions/sessions_ctrl',
+  'sessions/sessions_repository',
+  'sessions/votes_repository',
+
   'app'
 
 ], function(angular) {

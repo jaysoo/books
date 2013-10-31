@@ -14,7 +14,8 @@
     "lodash": "~2.0.0",
     "brick": "~1.0.0-beta7",
     "angular-animate": "~1.2.0-rc.2",
-    "angular-route": "~1.2.0-rc.2"
+    "angular-route": "~1.2.0-rc.2",
+    "moment": "~2.4.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

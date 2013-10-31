@@ -20,6 +20,7 @@ define([
   'security/services/authorization',
   'security/auth0/security'
 
+  // App
 ], function(_, config, AppCtrl, angular) {
 
   var app = angular.module('app', [
@@ -59,6 +60,10 @@ define([
       .when('/add-book', {
         templateUrl: 'views/books/add.html',
         controller: 'AddBookCtrl'
+      })
+      .when('/sessions', {
+        templateUrl: 'views/sessions/sessions_list.html',
+        controller: 'SessionsCtrl'
       })
       .otherwise({
         redirectTo: '/'

@@ -22,6 +22,10 @@ define(function() {
       $location.path('/');
     };
 
+    $scope.showBookClub = function() {
+      $location.path('/sessions');
+    };
+
     $scope.showFavourites = function() {
       $location.path('/favourites');
     };

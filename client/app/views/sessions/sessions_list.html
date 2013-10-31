@@ -1,0 +1,32 @@
+<p class="add-session">
+  <a ng-click="addSession()">
+    <i class="fa fa-plus-sign"></i>
+    Start New Session
+  </a>
+</p>
+
+<div class="sessions-current">
+  <h2>Current Session</h2>
+
+  <p>{{currentSession.title}}</p>
+  <p>{{currentSession.created_at}}</p>
+  <p>{{currentSession.notes}}</p>
+
+  <h3>Book Votes</h3>
+  <ul>
+    <li ng-repeat="book in books">
+      {{book.title}} ({{book.author}})
+    </li>
+  </ul>
+</div>
+
+<div ng-show="previousSessions.length > 0">
+  <h2>Previous Sessions</h2>
+  <ul>
+    <li data-ng-repeat="session in previousSessions">
+      <p>{{session.title}}</p>
+      <p>{{session.created_at}}</p>
+      <p>{{session.notes}}</p>
+    </li>
+  </ul>
+</div>

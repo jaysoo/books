@@ -1,6 +1,6 @@
 class App < Sinatra::Application
    get "/sessions" do
-     json Session.all
+     json Session.order_by(:created_at.desc)
    end
 
    get "/sessions/:ids" do
@@ -24,17 +24,17 @@ class App < Sinatra::Application
 
    # Voting
    get "/sessions/:session_id/votes" do
-     json Votes.where(session_id: params[:session_id])
+     json Vote.where(session_id: params[:session_id])
    end
 
-   put "/sessions/:session_id/votes/:book_id" do
+   put "/sessions/:session_id/votes/:book_id/:user_id" do
      data = vote_data(params)
      vote = Vote.new(data)
      vote.upsert
      json data
    end
 
-   delete "/sessions/:session_id/votes/:book_id" do
+   delete "/sessions/:session_id/votes/:book_id/:user_id" do
      session = Session.where(session_data(params)).first
      session.delete if session
      status 204
@@ -44,6 +44,10 @@ class App < Sinatra::Application
    private
 
    def vote_data params
-     {session_id: params[:session_id], book_id: [:book_id]}
+     {
+       session_id: params[:session_id],
+       book_id: params[:book_id],
+       user_id: params{:user_id}
+     }
    end
 end
