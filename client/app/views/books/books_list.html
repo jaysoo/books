@@ -20,7 +20,7 @@
 
       <h3 class="book-title">{{ book.title }}</h3>
       <p class="book-author">{{ book.author }}</p>
-      <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
+      <a download class="book-attachment" href="{{book.download_url}}" target="_blank" ng-show="book.download_url">
         <i class="icon-cloud-download"></i>
         download
       </a>

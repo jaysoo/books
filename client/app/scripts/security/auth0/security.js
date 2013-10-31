@@ -4,12 +4,12 @@
 define([
   'lodash',
   'angular',
-  '../user'
+  'firebase',
+  './user'
 
-], function(_, angular, User) {
+], function(_, angular, Firebase, User) {
   var module = angular.module('security', []);
 
-  var userInfoUrl = 'https://nulogy-books.auth0.com/userinfo';
   var storedAccessToken = '';
 
   module.provider('SecurityService', [SecurityServiceProvider]);
@@ -42,20 +42,18 @@ define([
           requestCurrentUser: function() {
             var deferred = $q.defer();
 
-            if (!storedAccessToken) {
-              setAnonymousUser();
-              deferred.resolve(currentUser);
-            } else {
-              var promise = $http.get(userInfoUrl + '?access_token=' + storedAccessToken);
-
-              promise.then(function(response) {
-                currentUser = new User(response.data);
+            $http.get('/identity').success(function(userData) {
+              if (userData !== 'null') {
+                currentUser = new User(userData);
                 deferred.resolve(currentUser);
-              }, function() {
+              } else {
                 setAnonymousUser();
                 deferred.resolve(currentUser);
-              });
-            }
+              }
+            }).error(function() {
+              setAnonymousUser();
+              deferred.resolve(currentUser);
+            });
 
             return deferred.promise;
           },
@@ -73,12 +71,11 @@ define([
 
             delete $cookies.storedAccessToken;
 
-            setAnonymousUser();
-            deferred.resolve(currentUser);
-
-            $timeout(function() {
+            $http.post('/logout').success(function() {
+              setAnonymousUser();
+              deferred.resolve(currentUser);
               $location.path('/login');
-            }, 0);
+            });
 
             return deferred.promise;
           }

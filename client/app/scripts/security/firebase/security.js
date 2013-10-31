@@ -5,7 +5,7 @@ define([
   'angular',
   'firebase',
 
-  '../user',
+  'user',
 
   'persona-sdk'
 

@@ -18,7 +18,7 @@ define([
   // Security
   'security/controllers/login-form',
   'security/services/authorization',
-  'security/services/auth0-security'
+  'security/auth0/security'
 
 ], function(_, config, AppCtrl, angular) {
 
@@ -70,7 +70,6 @@ define([
     var accessToken;
     if (accessTokenMatch) {
       accessToken = accessTokenMatch[1];
-      console.log(accessToken);
       SecurityServiceProvider.setAccessToken(accessToken);
     }
   }]);

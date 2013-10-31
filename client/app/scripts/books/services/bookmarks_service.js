@@ -14,7 +14,7 @@ define([
     var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
 
     function bookmarksRef(user) {
-      return usersRef.child(user.id()).child('bookmarks');
+      return usersRef.child(user.id).child('bookmarks');
     }
 
     return {

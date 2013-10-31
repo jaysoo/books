@@ -7,7 +7,7 @@ define(['common/helpers/object'], function(OH) {
 
   var props = {
     id: function() {
-      return this.user_id;
+      return this.id;
     },
 
     avatarUrl: function() {
