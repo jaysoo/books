@@ -10,11 +10,13 @@ class App < Sinatra::Application
         "image" => auth.info.image
       }
 
-      UserRepository.create(user_data)
-
-      session[:user_id] = user_data["id"]
-
-      redirect "/#access_token=#{session[:session_id]}"
+      if is_nulogy_user? auth.info.email
+        UserRepository.create(user_data)
+        session[:user_id] = user_data["id"]
+        redirect "/#access_token=#{session[:session_id]}"
+      else
+        redirect "/#login_failure=not_nulogy_user"
+      end
     end
   end
 
@@ -29,5 +31,11 @@ class App < Sinatra::Application
 
    post "/logout" do
      session.clear
+   end
+
+   private
+
+   def is_nulogy_user? email
+     email.end_with? 'nulogy.com'
    end
 end

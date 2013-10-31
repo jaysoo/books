@@ -11,6 +11,7 @@ define([
   var module = angular.module('security', []);
 
   var storedAccessToken = '';
+  var loginFailure = null;
 
   module.provider('SecurityService', [SecurityServiceProvider]);
 
@@ -27,7 +28,11 @@ define([
         storedAccessToken = accessToken;
       },
 
-      $get: ['$location', '$q', '$http', '$cookies', '$timeout', function($location, $q, $http, $cookies, $timeout) {
+      setLoginFailure: function(reason) {
+        loginFailure = reason;
+      },
+
+      $get: ['$location', '$q', '$http', '$cookies', function($location, $q, $http, $cookies) {
         if (storedAccessToken) {
           $cookies.storedAccessToken = storedAccessToken;
         } else {
@@ -35,6 +40,14 @@ define([
         }
 
         return {
+          loginFailed: function() {
+            return this.loginFailureReason() !== null;
+          },
+
+          loginFailureReason: function() {
+            return loginFailure;
+          },
+
           isAuthenticated: function() {
             return currentUser.isAuthenticated();
           },

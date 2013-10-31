@@ -1,0 +1,11 @@
+@import "variables";
+
+#login {
+  .error {
+    border: 1px solid $red-darker;
+    color: $red-darker;
+    border-radius: 3px;
+    background-color: $red-lightest;
+    padding: $gutter-size;
+  }
+}

@@ -74,6 +74,15 @@ define([
     }
   }]);
 
+  app.config(['SecurityServiceProvider', function(SecurityServiceProvider) {
+    var loginFailureMatch = /login_failure=([^&]*)/g.exec(window.location.hash);
+    var reason;
+    if (loginFailureMatch) {
+      reason = loginFailureMatch[1];
+      SecurityServiceProvider.setLoginFailure(reason);
+    }
+  }]);
+
   app.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
     SecurityService.requestCurrentUser().then(function() {
       checkAuth();
