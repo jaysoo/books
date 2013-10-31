@@ -52,9 +52,9 @@ define([
         templateUrl: 'views/books/books_list.html',
         controller: 'BooksListCtrl'
       })
-      .when('/bookmarks', {
-        templateUrl: 'views/books/bookmarks.html',
-        controller: 'BookmarksCtrl'
+      .when('/favourites', {
+        templateUrl: 'views/books/favourites.html',
+        controller: 'FavouritesCtrl'
       })
       .when('/add-book', {
         templateUrl: 'views/books/add.html',

@@ -22,8 +22,8 @@ define(function() {
       $location.path('/');
     };
 
-    $scope.showBookmarks = function() {
-      $location.path('/bookmarks');
+    $scope.showFavourites = function() {
+      $location.path('/favourites');
     };
 
     $scope.$watch(function() {
