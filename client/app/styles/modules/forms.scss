@@ -1,0 +1,9 @@
+@import "variables";
+
+input, textarea {
+  &.ng-dirty.ng-invalid {
+    background-color: $red-lightest;
+    border: 1px solid $red-darker;
+    color: $red-darker;
+  }
+}
