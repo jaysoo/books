@@ -34,7 +34,6 @@ class App < Sinatra::Application
 
    delete "/sessions/:session_id/votes/:book_id/:user_id" do
      vote = Vote.where(vote_data(params)).first
-     binding.pry
      vote.delete if vote
      status 204
      json ''
