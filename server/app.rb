@@ -51,3 +51,4 @@ require_relative "domain/init"
 require_relative 'app/books'
 require_relative 'app/favourites'
 require_relative 'app/identity'
+require_relative 'app/sessions'
