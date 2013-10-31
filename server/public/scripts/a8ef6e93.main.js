@@ -36366,13 +36366,17 @@ define("bootstrap-dropdown", function(){});
 
 define('security/controllers/login-form',['angular'], function(angular) {
   var module = angular.module('security.login.form', ['security']);
+
   module.controller('LoginFormCtrl', ['$scope', 'SecurityService', function ($scope, SecurityService) {
     $scope.$watch(function() {
       return SecurityService.currentUser();
     }, function(currentUser) {
       $scope.currentUser = currentUser;
     });
+
     $scope.login = SecurityService.login;
+
+    $scope.loginFailureReason = SecurityService.loginFailureReason();
   }]);
 });
 
@@ -36436,24 +36440,21 @@ define('common/helpers/object',{
 
 
 
-define('security/user',['common/helpers/object'], function(OH) {
+define('security/auth0/user',['common/helpers/object'], function(OH) {
   function User(userData) {
     OH.setData(this, userData);
   }
 
   var props = {
-    id: function() {
-      return this.user_id;
-    },
-
     avatarUrl: function() {
-      return this.picture;
+      return this.image;
     },
 
     isAuthenticated: function() {
       return true;
     }
   };
+
   OH.include(User, props);
 
   OH.extend(User, {
@@ -36481,16 +36482,17 @@ define('security/user',['common/helpers/object'], function(OH) {
 /* global Auth0 */
 
 
-define('security/services/auth0-security',[
+define('security/auth0/security',[
   'lodash',
   'angular',
-  '../user'
+  'firebase',
+  './user'
 
-], function(_, angular, User) {
+], function(_, angular, Firebase, User) {
   var module = angular.module('security', []);
 
-  var userInfoUrl = 'https://nulogy-books.auth0.com/userinfo';
   var storedAccessToken = '';
+  var loginFailure = null;
 
   module.provider('SecurityService', [SecurityServiceProvider]);
 
@@ -36507,7 +36509,11 @@ define('security/services/auth0-security',[
         storedAccessToken = accessToken;
       },
 
-      $get: ['$location', '$q', '$http', '$cookies', '$timeout', function($location, $q, $http, $cookies, $timeout) {
+      setLoginFailure: function(reason) {
+        loginFailure = reason;
+      },
+
+      $get: ['$location', '$q', '$http', '$cookies', function($location, $q, $http, $cookies) {
         if (storedAccessToken) {
           $cookies.storedAccessToken = storedAccessToken;
         } else {
@@ -36515,6 +36521,14 @@ define('security/services/auth0-security',[
         }
 
         return {
+          loginFailed: function() {
+            return this.loginFailureReason() !== null;
+          },
+
+          loginFailureReason: function() {
+            return loginFailure;
+          },
+
           isAuthenticated: function() {
             return currentUser.isAuthenticated();
           },
@@ -36522,20 +36536,18 @@ define('security/services/auth0-security',[
           requestCurrentUser: function() {
             var deferred = $q.defer();
 
-            if (!storedAccessToken) {
-              setAnonymousUser();
-              deferred.resolve(currentUser);
-            } else {
-              var promise = $http.get(userInfoUrl + '?access_token=' + storedAccessToken);
-
-              promise.then(function(response) {
-                currentUser = new User(response.data);
+            $http.get('/identity').success(function(userData) {
+              if (userData !== 'null') {
+                currentUser = new User(userData);
                 deferred.resolve(currentUser);
-              }, function() {
+              } else {
                 setAnonymousUser();
                 deferred.resolve(currentUser);
-              });
-            }
+              }
+            }).error(function() {
+              setAnonymousUser();
+              deferred.resolve(currentUser);
+            });
 
             return deferred.promise;
           },
@@ -36553,12 +36565,11 @@ define('security/services/auth0-security',[
 
             delete $cookies.storedAccessToken;
 
-            setAnonymousUser();
-            deferred.resolve(currentUser);
-
-            $timeout(function() {
+            $http.post('/logout').success(function() {
+              setAnonymousUser();
+              deferred.resolve(currentUser);
               $location.path('/login');
-            }, 0);
+            });
 
             return deferred.promise;
           }
@@ -36590,7 +36601,7 @@ define('app',[
   // Security
   'security/controllers/login-form',
   'security/services/authorization',
-  'security/services/auth0-security'
+  'security/auth0/security'
 
 ], function(_, config, AppCtrl, angular) {
 
@@ -36642,20 +36653,34 @@ define('app',[
     var accessToken;
     if (accessTokenMatch) {
       accessToken = accessTokenMatch[1];
-      console.log(accessToken);
       SecurityServiceProvider.setAccessToken(accessToken);
+    }
+  }]);
+
+  app.config(['SecurityServiceProvider', function(SecurityServiceProvider) {
+    var loginFailureMatch = /login_failure=([^&]*)/g.exec(window.location.hash);
+    var reason;
+    if (loginFailureMatch) {
+      reason = loginFailureMatch[1];
+      SecurityServiceProvider.setLoginFailure(reason);
     }
   }]);
 
   app.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
     SecurityService.requestCurrentUser().then(function() {
+      checkAuth();
+
       $rootScope.$on('$routeChangeStart', function(evt, next) {
-        if (!SecurityService.currentUser().isAuthenticated()) {
-          if (next.$$route.controller !== 'LoginCtrl') {
-            $location.path('/login');
-          }
+        if (next.$$route.controller !== 'LoginCtrl') {
+          checkAuth();
         }
       });
+
+      function checkAuth() {
+        if (!SecurityService.currentUser().isAuthenticated()) {
+          $location.path('/login');
+        }
+      }
     });
   }]);
 
@@ -36674,14 +36699,13 @@ define('app',[
 
 define('books/controllers/add_book_ctrl',['app'], function(App) {
 
-  App.controller('AddBookCtrl', ['$scope', '$location', 'AddBookService', 'UploadBookService',
-    function($scope, $location, AddBookService, UploadBookService) {
+  App.controller('AddBookCtrl', ['$scope', '$location', 'BooksRepository', 'UploadBookService',
+    function($scope, $location, BooksRepository, UploadBookService) {
       $scope.book = {};
 
       $scope.add = function() {
-        AddBookService.add($scope.book).then(function() {
-          $location.path('/');
-        });
+        BooksRepository.create($scope.book);
+        $location.path('/');
       };
 
       $scope.cancel = function() {
@@ -36712,7 +36736,7 @@ define('books/controllers/bookmarks_ctrl',['app', 'firebase'], function(App, Fir
       var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
 
       function bookmarksRef(user) {
-        return usersRef.child(user.id()).child('bookmarks');
+        return usersRef.child(user.id).child('bookmarks');
       }
 
       function safeApply($scope, applyFn) {
@@ -36755,107 +36779,33 @@ define('books/controllers/bookmarks_ctrl',['app', 'firebase'], function(App, Fir
 
 
 define('books/controllers/books_list_ctrl',['app', 'firebase'], function(App, Firebase) {
-  App.controller('BooksListCtrl', ['$scope', 'angularFireCollection', 'BookmarksService', 'SecurityService',
-    function($scope, angularFireCollection, BookmarksService, SecurityService) {
-      var booksRef = new Firebase('https://nulogy-books.firebaseio.com/books');
-      var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
-
-      function bookmarksRef(user) {
-        return usersRef.child(user.id()).child('bookmarks');
-      }
-
-      $scope.books = angularFireCollection(new Firebase('https://nulogy-books.firebaseio.com/books'));
-
-      $scope.$watch(function() {
-        return SecurityService.currentUser();
-      }, function(currentUser) {
-        $scope.currentUser = currentUser;
-      });
-
-      function safeApply($scope, applyFn) {
-        if(!$scope.$$phase) $scope.$apply(applyFn);
-        else applyFn();
-      }
-
-      $scope.$watch('currentUser', function(user) {
-        if (user.isAuthenticated()) {
-          $scope.bookmarksRef = bookmarksRef(user);
-        }
-      });
-
-      $scope.$watch('bookmarksRef', function(ref) {
-        if (ref) {
-          ref.on('child_added', function(bookmarkSnap) {
-            if (bookmarkSnap.val()) {
-              booksRef.child(bookmarkSnap.name()).once('value', function(bookSnap) {
-                var book = _.find($scope.books, function(book) { return book.$id === bookSnap.name(); });
-                if (book) {
-                  safeApply($scope, function() {
-                    book.isBookmarked = true;
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-
-      $scope.$watch('isBookmarked', function(isBookmarked, oldValue, scope) {
-        if (!$scope.currentUser.isAuthenticated() || !$scope.book) {
-          return;
-        }
-
-        if (isBookmarked) {
-          scope.addBookmark($scope.currentUser, $scope.book);
-        } else {
-          scope.removeBookmark($scope.currentUser, $scope.book);
-        }
-      });
-
-      $scope.addBookmark = function(user, book) {
-        if (!user.isAuthenticated()) {
-          return;
-        }
-
-        book.isBookmarked = true;
-        BookmarksService.add(user, book);
-      };
-
-      $scope.removeBookmark = function(user, book) {
-        if (!user.isAuthenticated()) {
-          return;
-        }
-
-        book.isBookmarked = false;
-        BookmarksService.remove(user, book);
-      };
+  App.controller('BooksListCtrl', ['$scope', 'angularFireCollection', 'BookmarksService', 'SecurityService', 'BooksRepository',
+    function($scope, angularFireCollection, BookmarksService, SecurityService, BooksRepository) {
+      $scope.books = BooksRepository.list();
     }
   ]);
 });
 
 
 
-define('books/repositories/books_repository',['lodash', 'app', 'firebase'], function(_, App, Firebase) {
-  App.factory('BooksRepository', function() {
-    var ref = new Firebase('https://nulogy-books.firebaseio.com/books');
+define('books/repositories/books_repository',['lodash', 'app'], function(_, App) {
+  App.factory('BooksRepository', ['$resource', function($resource) {
+    var Book = $resource('/books/:id', {
+      id: '@id'
+    });
 
     return {
-      list: function(ids) {
-        var list = [];
+      list: function() {
+        return Book.query();
+      },
 
-        ref.on('child_added', function(snapshot) {
-          if (_.contains(ids, snapshot.name())) {
-            console.log(snapshot.name())
-            list.push(snapshot.val());
-          }
-        });
-
-        return list;
+      create: function(bookData) {
+        var book = new Book(bookData);
+        return book.$save();
       }
     };
-  });
+  }]);
 });
-
 
 
 
@@ -36874,33 +36824,6 @@ define('common/helpers/firebase',{
 
 
 
-define('books/services/add_book_service',[
-  'lodash',
-  'app',
-  'firebase',
-
-  'common/helpers/firebase'
-
-], function(_, App, Firebase, FirebaseHelpers) {
-  App.factory('AddBookService', ['$q', AddBookService]);
-
-  function AddBookService($q) {
-    var ref = new Firebase('https://nulogy-books.firebaseio.com/books');
-
-    return {
-      add: function(book) {
-        var deferred = $q.defer();
-        ref.push(book, FirebaseHelpers.callbackFor(deferred));
-        return deferred.promise;
-      }
-    };
-  }
-
-  return AddBookService;
-});
-
-
-
 define('books/services/bookmarks_service',[
   'lodash',
   'app',
@@ -36915,7 +36838,7 @@ define('books/services/bookmarks_service',[
     var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
 
     function bookmarksRef(user) {
-      return usersRef.child(user.id()).child('bookmarks');
+      return usersRef.child(user.id).child('bookmarks');
     }
 
     return {
@@ -37027,7 +36950,6 @@ require({
   'books/controllers/bookmarks_ctrl',
   'books/controllers/books_list_ctrl',
   'books/repositories/books_repository',
-  'books/services/add_book_service',
   'books/services/bookmarks_service',
   'books/services/upload_book_service',
 

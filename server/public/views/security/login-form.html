@@ -1,6 +1,14 @@
-<form class="form-inline" data-ng-submit="login()" data-ng-hide="currentUser.isAuthenticated()">
-  <h2>Authentication required</h2>
-  <p>You must sign in with your Google account to continue.</p>
+<form id="login" class="form-inline" data-ng-submit="login()" data-ng-hide="currentUser.isAuthenticated()">
+   <h2>Authentication required</h2>
+
+  <div ng-if="loginFailureReason == 'not_nulogy_user'">
+    <p class="error">
+      Email address not a Nulogy account!
+    </p>
+  </div>
+
+  <p>You must sign in with your Nulogy Google account to continue.</p>
+
   <button class="btn btn-large btn-primary">
     <i class="icon-signin"></i>
     Okay, sign me in!

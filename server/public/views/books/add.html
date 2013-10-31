@@ -1,9 +1,9 @@
-<form class="form-horizontal add-book">
+<form name="add-book" class="form-horizontal add-book" novalidate ng-submit="add()">
   <div class="control-group">
     <div class="control-group">
       <label class="control-label">Title: </label>
       <div class="controls">
-        <input type="text" ng-model="book.title" required />
+        <input type="text" ng-model="book.title" required autofocus />
       </div>
     </div>
 
@@ -28,14 +28,14 @@
             {{book.meta.filename}}
           </span>
           <a class="book-attachment-remove" ng-click="removeAttachment()">
-              <i class="icon-remove-sign"></i>
-          </span>
+            <i class="icon-remove-sign"></i>
+          </a>
       </div>
     </div>
 
     <div class="control-group">
       <div class="controls">
-        <button class="btn btn-primary" ng-click="add()">
+        <button class="btn btn-primary" type="submit">
           <i class="icon-plus-sign"></i>
           Add Book
         </button>
