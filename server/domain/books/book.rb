@@ -1,10 +1,7 @@
 class Book
-  attr_accessor :id, :author, :title, :download_url
+  include Mongoid::Document
 
-  def initialize attrs
-    @id = attrs["id"]
-    @author = attrs["author"]
-    @title = attrs["title"]
-    @download_url = attrs["download_url"]
-  end
+  field :author, type: String
+  field :title, type: String
+  field :download_url, type: String
 end

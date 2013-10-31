@@ -2,6 +2,7 @@ require "auth0"
 require "omniauth"
 require "sinatra"
 require "sinatra/json"
+require "mongoid"
 require "firebase_token_generator"
 
 
@@ -15,6 +16,8 @@ class App < Sinatra::Application
   set :sessions, true
   set :firebase_secret, ENV["FIREBASE_SECRET"]
   set :json_encoder, :to_json
+
+  Mongoid.load!("#{File.dirname(__FILE__)}/config/mongoid.yml", ENV["RACK_ENV"])
 
   configure :production do
     set :show_exceptions, false
@@ -42,5 +45,5 @@ end
 
 
 require_relative "domain/init"
-require_relative "ports/persistence/rethinkdb_adaptor/init"
+# require_relative "ports/persistence/rethinkdb_adaptor/init"
 require_relative "routes"

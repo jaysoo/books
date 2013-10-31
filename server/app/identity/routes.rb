@@ -3,7 +3,7 @@ class App < Sinatra::Application
     send(method, "/auth/:name/callback") do
       auth = request.env['omniauth.auth']
       user_data = {
-        "id" => auth.uid,
+        "uid" => auth.uid,
         "first_name" => auth.info.first_name,
         "last_name" => auth.info.last_name,
         "email" => auth.info.email,
@@ -11,8 +11,8 @@ class App < Sinatra::Application
       }
 
       if is_nulogy_user? auth.info.email
-        UserRepository.create(user_data)
-        session[:user_id] = user_data["id"]
+        User.create!(user_data)
+        session[:user_uid] = user_data["uid"]
         redirect "/#access_token=#{session[:session_id]}"
       else
         redirect "/#login_failure=not_nulogy_user"
@@ -21,9 +21,9 @@ class App < Sinatra::Application
   end
 
    get "/identity" do
-     user_id = session[:user_id]
-     if user_id
-       json UserRepository.get(user_id)
+     user_uid = session[:user_uid]
+     if user_uid
+       json User.where(uid: user_uid).first
      else
        json nil
      end

@@ -1,11 +1,8 @@
 class User
-  attr_accessor :id, :email, :image, :first_name, :last_name
+  include Mongoid::Document
 
-  def initialize attrs
-    @id = attrs["id"]
-    @email = attrs["email"]
-    @image = attrs["image"]
-    @first_name = attrs["first_name"]
-    @last_name = attrs["last_name"]
-  end
+  field :email, type: String
+  field :first_name, type: String
+  field :last_name, type: String
+  field :image, type: String
 end
