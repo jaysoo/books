@@ -76,13 +76,19 @@ define([
 
   app.run(['$rootScope', '$location', 'SecurityService', function($rootScope, $location, SecurityService) {
     SecurityService.requestCurrentUser().then(function() {
+      checkAuth();
+
       $rootScope.$on('$routeChangeStart', function(evt, next) {
-        if (!SecurityService.currentUser().isAuthenticated()) {
-          if (next.$$route.controller !== 'LoginCtrl') {
-            $location.path('/login');
-          }
+        if (next.$$route.controller !== 'LoginCtrl') {
+          checkAuth();
         }
       });
+
+      function checkAuth() {
+        if (!SecurityService.currentUser().isAuthenticated()) {
+          $location.path('/login');
+        }
+      }
     });
   }]);
 
