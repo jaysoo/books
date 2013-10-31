@@ -44,5 +44,10 @@ class App < Sinatra::Application
 end
 
 
+# Domain models
 require_relative "domain/init"
-require_relative "routes"
+
+# Submodules
+require_relative 'app/books'
+require_relative 'app/favourites'
+require_relative 'app/identity'

@@ -59,7 +59,7 @@
   }
 }
 
-.bookmark {
+.favourite {
   visibility: hidden;
   position: absolute;
   top: 5px;
@@ -68,8 +68,8 @@
 }
 
 .book:hover,
-.book.is-bookmarked {
-  .bookmark {
+.book.is-favourited {
+  .favourite {
     visibility: visible;
   }
 }

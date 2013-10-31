@@ -9,12 +9,12 @@
   </li>
 
   <li data-ng-repeat="book in books">
-    <article class="book" ng-class="{'is-bookmarked': book.isBookmarked}">
-      <a class="bookmark" ng-click="addToFavourites(currentUser, book)" ng-hide="book.isBookmarked">
+    <article class="book" ng-class="{'is-favourited': favourited[book.id]}">
+      <a class="favourite" ng-click="addToFavourites(currentUser, book)" ng-hide="favourited[book.id]">
         <i class="fa fa-star-o"></i>
       </a>
 
-      <a class="bookmark" ng-click="removeFromFavourites(currentUser, book)" ng-show="book.isBookmarked">
+      <a class="favourite" ng-click="removeFromFavourites(currentUser, book)" ng-show="favourited[book.id]">
         <i class="fa fa-star"></i>
       </a>
 

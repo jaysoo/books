@@ -2,23 +2,45 @@
 
 define([
   'lodash',
-  'app',
-  'firebase',
+  'app'
 
-  'common/helpers/firebase'
+], function(_, App) {
+  App.factory('FavouritesRepository', ['$resource', '$q',
+    function ($resource, $q) {
+      var Favourite = $resource('/favourites/:user_id/:book_id', {
+        user_id: '@user_id',
+        book_id: '@book_id'
+      }, {
+        add: { method: 'PUT' }
+      });
 
-], function(_, App, Firebase) {
-  App.factory('FavouritesService', ['$resource', FavouritesService]);
+      return {
+        list: function() {
+          var deferred = $q.defer();
+          Favourite.query(function(favs) {
+            deferred.resolve(favs);
+          });
+          return deferred.promise;
+        },
 
-  function FavouritesService($resource) {
-    return {
-      add: function(user, book) {
-      },
+        add: function(user, book) {
+          var fav = new Favourite({
+            user_id: user._id,
+            book_id: book._id
+          });
 
-      remove: function(user, book) {
-      }
-    };
-  }
+          fav.$add();
+        },
 
-  return FavouritesService;
+        remove: function(user, book) {
+          var fav = Favourite.get({
+            user_id: user._id,
+            book_id: book._id
+          }, function() {
+            fav.$remove();
+          });
+        }
+      };
+    }
+  ]);
 });
