@@ -24331,8 +24331,12 @@ define('app-ctrl',[],function() {
       $location.path('/');
     };
 
-    $scope.showBookmarks = function() {
-      $location.path('/bookmarks');
+    $scope.showBookClub = function() {
+      $location.path('/sessions');
+    };
+
+    $scope.showFavourites = function() {
+      $location.path('/favourites');
     };
 
     $scope.$watch(function() {
@@ -36445,6 +36449,10 @@ define('security/auth0/user',['common/helpers/object'], function(OH) {
     OH.setData(this, userData);
   }
 
+  User.prototype = {
+    get id() { return this._id; }
+  };
+
   var props = {
     avatarUrl: function() {
       return this.image;
@@ -36603,6 +36611,7 @@ define('app',[
   'security/services/authorization',
   'security/auth0/security'
 
+  // App
 ], function(_, config, AppCtrl, angular) {
 
   var app = angular.module('app', [
@@ -36635,13 +36644,17 @@ define('app',[
         templateUrl: 'views/books/books_list.html',
         controller: 'BooksListCtrl'
       })
-      .when('/bookmarks', {
-        templateUrl: 'views/books/bookmarks.html',
-        controller: 'BookmarksCtrl'
+      .when('/favourites', {
+        templateUrl: 'views/books/favourites.html',
+        controller: 'FavouritesCtrl'
       })
       .when('/add-book', {
         templateUrl: 'views/books/add.html',
         controller: 'AddBookCtrl'
+      })
+      .when('/sessions', {
+        templateUrl: 'views/sessions/sessions_list.html',
+        controller: 'SessionsCtrl'
       })
       .otherwise({
         redirectTo: '/'
@@ -36729,59 +36742,58 @@ define('books/controllers/add_book_ctrl',['app'], function(App) {
 
 
 
-define('books/controllers/bookmarks_ctrl',['app', 'firebase'], function(App, Firebase) {
-  App.controller('BookmarksCtrl', ['$scope', 'BooksRepository', 'SecurityService', 'angularFireCollection',
-    function($scope, BooksRepository, SecurityService, angularFireCollection) {
-      var booksRef = new Firebase('https://nulogy-books.firebaseio.com/books');
-      var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
+define('books/controllers/books_list_ctrl',['lodash', 'app', 'firebase'], function(_, App, Firebase) {
+  App.controller('BooksListCtrl', ['$scope', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
+    function($scope, FavouritesRepository, SecurityService, BooksRepository) {
+      $scope.favourited = {};
 
-      function bookmarksRef(user) {
-        return usersRef.child(user.id).child('bookmarks');
-      }
-
-      function safeApply($scope, applyFn) {
-        if(!$scope.$$phase) $scope.$apply(applyFn);
-        else applyFn();
-      }
-
-      $scope.$watch(function() {
-        return SecurityService.currentUser();
-      }, function(currentUser) {
-        $scope.currentUser = currentUser;
+      BooksRepository.list().then(function(books) {
+        $scope.books = books;
       });
 
-
-      $scope.$watch('currentUser', function(user) {
-        if (user.isAuthenticated()) {
-          $scope.bookmarksRef = bookmarksRef(user);
-        }
+      FavouritesRepository.list().then(function(favs) {
+        _.each(favs, function(fav) {
+          $scope.favourited[fav.book_id] = true;
+        });
       });
 
-      $scope.$watch('bookmarksRef', function(ref) {
-        if (ref) {
-          var books = [];
-          ref.on('child_added', function(bookmarkSnap) {
-            if (bookmarkSnap.val()) {
-              booksRef.child(bookmarkSnap.name()).once('value', function(bookSnap) {
-                books.push(bookSnap.val());
-                safeApply($scope, function() {
-                  $scope.books = books;
-                });
-              });
-            }
-          });
-        }
-      });
+      $scope.addToFavourites = function(user, book) {
+        FavouritesRepository.add(user, book);
+        $scope.favourited[book.id] = true;
+      };
+
+      $scope.removeFromFavourites = function(user, book) {
+        FavouritesRepository.remove(user, book);
+        $scope.favourited[book.id] = false;
+      };
     }
   ]);
 });
 
 
 
-define('books/controllers/books_list_ctrl',['app', 'firebase'], function(App, Firebase) {
-  App.controller('BooksListCtrl', ['$scope', 'angularFireCollection', 'BookmarksService', 'SecurityService', 'BooksRepository',
-    function($scope, angularFireCollection, BookmarksService, SecurityService, BooksRepository) {
-      $scope.books = BooksRepository.list();
+define('books/controllers/favourites_ctrl',['lodash', 'app', 'firebase'], function(_, App, Firebase) {
+  App.controller('FavouritesCtrl', ['$scope', 'FavouritesRepository', 'BooksRepository',
+    function($scope, FavouritesRepository, BooksRepository) {
+
+      FavouritesRepository.list().then(loadBooksFromFavourites);
+
+      $scope.removeFavourite = function(user, book) {
+        FavouritesRepository.remove(user, book);
+
+        $scope.books = _.without($scope.books, function(b) {
+          return b.id === book.id;
+        });
+      };
+
+      function loadBooksFromFavourites(favs) {
+        if (favs.length > 0) {
+          var bookIds = _.pluck(favs, 'book_id');
+          BooksRepository.find(bookIds).then(function(books) {
+            $scope.books = books;
+          });
+        }
+      }
     }
   ]);
 });
@@ -36789,80 +36801,119 @@ define('books/controllers/books_list_ctrl',['app', 'firebase'], function(App, Fi
 
 
 define('books/repositories/books_repository',['lodash', 'app'], function(_, App) {
-  App.factory('BooksRepository', ['$resource', function($resource) {
-    var Book = $resource('/books/:id', {
-      id: '@id'
-    });
+  App.factory('BooksRepository', ['$resource', '$q',
+    function($resource, $q) {
 
-    return {
-      list: function() {
-        return Book.query();
-      },
+      var Book = $resource('/books/:id', {
+        id: '@id'
+      }, {
+        find: {
+          method: 'GET',
+          isArray: true
+        }
+      });
 
-      create: function(bookData) {
-        var book = new Book(bookData);
-        return book.$save();
-      }
-    };
-  }]);
-});
+      Object.defineProperties(Book.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
+      });
 
+      return {
+        list: function() {
+          var deferred = $q.defer();
+          Book.query(function(books) {
+            deferred.resolve(books);
+          });
+          return deferred.promise;
+        },
 
+        find: function(bookIds) {
+          var deferred = $q.defer();
+          Book.find({id: bookIds.join(',')}, function(books) {
+            deferred.resolve(books);
+          });
+          return deferred.promise;
+        },
 
+        get: function(bookId) {
+          var deferred = $q.defer();
 
-define('common/helpers/firebase',{
-  callbackFor: function(deferred) {
-    return function(err){
-      if (err) {
-        deferred.reject(err);
-      } else {
-        deferred.resolve();
-      }
-    };
-  }
-});
+          Book.get({id: bookId}, function(book) {
+            deferred.resolve(book);
+          });
 
+          return deferred.promise;
+        },
 
-
-define('books/services/bookmarks_service',[
-  'lodash',
-  'app',
-  'firebase',
-
-  'common/helpers/firebase'
-
-], function(_, App, Firebase) {
-  App.factory('BookmarksService', ['$q', BookmarksService]);
-
-  function BookmarksService($q) {
-    var usersRef = new Firebase('https://nulogy-books.firebaseio.com/users');
-
-    function bookmarksRef(user) {
-      return usersRef.child(user.id).child('bookmarks');
+        create: function(bookData) {
+          var book = new Book(bookData);
+          return book.$save();
+        }
+      };
     }
+  ]);
+});
 
-    return {
-      isBookmarked: function(user, book) {
-        var deferred = $q.defer();
 
-        bookmarksRef(user).child(book.$ref.name()).once('value', function(snapshot) {
-          deferred.resolve(snapshot.val());
-        });
 
-        return deferred.promise;
-      },
 
-      add: function(user, book) {
-        bookmarksRef(user).child(book.$ref.name()).set(true);
-      },
+define('books/repositories/favourites_repository',['lodash', 'app'], function(_, App) {
+  App.factory('FavouritesRepository', ['$resource', '$q',
+    function ($resource, $q) {
+      var Favourite = $resource('/favourites/:user_id/:book_id', {
+        user_id: '@user_id',
+        book_id: '@book_id'
+      }, {
+        add: { method: 'PUT' }
+      });
 
-      remove: function(user, book) {
-        bookmarksRef(user).child(book.$ref.name()).set(false);
-      }
-    };
-  }
+      Object.defineProperties(Favourite.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
+      });
 
-  return BookmarksService;
+      return {
+        list: function() {
+          var deferred = $q.defer();
+          Favourite.query(function(favs) {
+            deferred.resolve(favs);
+          });
+          return deferred.promise;
+        },
+
+        add: function(user, book) {
+          var deferred = $q.defer();
+
+          var fav = new Favourite({
+            user_id: user.id,
+            book_id: book.id
+          });
+
+          fav.$add(function() {
+            deferred.resolve(fav);
+          });
+
+          return deferred.promise;
+        },
+
+        remove: function(user, book) {
+          var deferred = $q.defer();
+
+          Favourite.remove({ user_id: user.id, book_id: book.id }, function() {
+            deferred.resolve();
+          });
+
+          return deferred.promise;
+        }
+      };
+    }
+  ]);
 });
 
 
@@ -36897,6 +36948,209 @@ define('books/services/upload_book_service',[
 
   return UploadBookService;
 });
+
+
+
+define('sessions/sessions_ctrl',['lodash', 'app', 'firebase'], function(_, App, Firebase) {
+  App.controller('SessionsCtrl', ['$scope', 'SessionsRepository', 'VotesRepository', 'BooksRepository',
+    function($scope, SessionsRepository, VotesRepository, BooksRepository) {
+      $scope.voted = {};
+
+      $scope.addSession = function() {
+        SessionsRepository.create().then(fetchSessions);
+      };
+
+      $scope.$watch('currentSession', function(currentSession) {
+        fetchVotesFor(currentSession);
+      });
+
+      $scope.voteFor = function(session, book, user) {
+        VotesRepository.add(session, book, user);
+        onVote(book);
+      };
+
+      $scope.removeVoteFor = function(session, book, user) {
+        VotesRepository.remove(session, book, user);
+        onUnvote(book);
+      };
+
+      fetchSessions();
+      fetchBooks();
+
+      function fetchSessions() {
+        SessionsRepository.list().then(function(sessions) {
+          if (sessions.length > 0) {
+            $scope.currentSession = sessions[0];
+            $scope.previousSessions = _.rest(sessions);
+          }
+        });
+      }
+
+      function fetchVotesFor(currentSession) {
+        if (!currentSession) { return; }
+
+        VotesRepository.list(currentSession).then(function(votes) {
+          var votesByBookId = _.reduce(votes, function(votes, vote) {
+            if (vote.user_id === $scope.currentUser.id) {
+              $scope.voted[vote.book_id] = true;
+            }
+
+            votes[vote.book_id] = votes[vote.book_id] || 0;
+            votes[vote.book_id]++;
+
+            return votes;
+          }, {});
+
+          $scope.votesByBookId = votesByBookId;
+        });
+      }
+
+      function fetchBooks() {
+        BooksRepository.list().then(function(books) {
+          $scope.books = books;
+        });
+      }
+
+      function onVote(book) {
+        ensureBookCount(book);
+        $scope.voted[book.id] = true;
+        $scope.votesByBookId[book.id]++;
+      }
+
+      function onUnvote(book) {
+        ensureBookCount(book);
+        $scope.voted[book.id] = false;
+        $scope.votesByBookId[book.id]--;
+      }
+
+      function ensureBookCount(book) {
+        $scope.votesByBookId[book.id] = $scope.votesByBookId[book.id] || 0;
+      }
+    }
+  ]);
+});
+
+
+
+define('sessions/sessions_repository',['lodash', 'app'], function(_, App) {
+  App.factory('SessionsRepository', ['$resource', '$q',
+    function ($resource, $q) {
+      var Session = $resource('/sessions/:id', {
+        id: '@id'
+      });
+
+      Object.defineProperties(Session.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
+      });
+
+      return {
+        list: function() {
+          var deferred = $q.defer();
+          Session.query(function(sessions) {
+            deferred.resolve(sessions);
+          });
+          return deferred.promise;
+        },
+
+        create: function(sessionData) {
+          var deferred = $q.defer();
+
+          var session = new Session(sessionData);
+
+          session.$save(function() {
+            deferred.resolve(session);
+          });
+
+          return deferred.promise;
+        },
+
+        remove: function(session) {
+          var deferred = $q.defer();
+
+          session.remove({id: session.id}, function() {
+            deferred.resolve();
+          });
+
+          return deferred.promise;
+        }
+      };
+    }
+  ]);
+});
+
+
+
+define('sessions/votes_repository',['lodash', 'app'], function(_, App) {
+  App.factory('VotesRepository', ['$resource', '$q',
+    function ($resource, $q) {
+      var Vote = $resource('/sessions/:session_id/votes/:book_id/:user_id', {
+        session_id: '@session_id',
+        user_id: '@user_id',
+        book_id: '@book_id'
+      }, {
+        add: { method: 'PUT' }
+      });
+
+      Object.defineProperties(Vote.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
+      });
+
+      return {
+        list: function(session) {
+          var deferred = $q.defer();
+
+          Vote.query({
+            session_id: session.id
+
+          }, function(votes) {
+            deferred.resolve(votes);
+          });
+
+          return deferred.promise;
+        },
+
+        add: function(session, book, user) {
+          var deferred = $q.defer();
+
+          var vote = new Vote({
+            session_id: session.id,
+            book_id: book.id,
+            user_id: user.id
+          });
+
+          vote.$add(function() {
+            deferred.resolve(vote);
+          });
+
+          return deferred.promise;
+        },
+
+        remove: function(session, book, user) {
+          var deferred = $q.defer();
+
+          Vote.remove({
+            session_id: session.id,
+            book_id: book.id,
+            user_id: user.id
+          }, function() {
+            deferred.resolve();
+          });
+
+          return deferred.promise;
+        }
+      };
+    }
+  ]);
+});
+
 
 
 
@@ -36947,13 +37201,16 @@ require({
 
   // Books
   'books/controllers/add_book_ctrl',
-  'books/controllers/bookmarks_ctrl',
   'books/controllers/books_list_ctrl',
+  'books/controllers/favourites_ctrl',
   'books/repositories/books_repository',
-  'books/services/bookmarks_service',
+  'books/repositories/favourites_repository',
   'books/services/upload_book_service',
 
-  // App
+  'sessions/sessions_ctrl',
+  'sessions/sessions_repository',
+  'sessions/votes_repository',
+
   'app'
 
 ], function(angular) {

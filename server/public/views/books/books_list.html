@@ -1,29 +1,25 @@
-<ul class="books-list">
-  <li>
-    <div class="book add-book">
-      <a href="#/add-book">
-        <i class="icon-plus-sign"></i>
-        Add Book
-      </a>
-    </div>
+<ul class="books-list" ng-show="books.length > 0">
+  <li class="book add-book">
+    <a href="#/add-book">
+      <i class="fa fa-plus-sign"></i>
+      Add Book
+    </a>
   </li>
 
-  <li data-ng-repeat="book in books">
-    <article class="book" ng-class="{'is-bookmarked': book.isBookmarked}">
-      <a class="bookmark" ng-click="addBookmark(currentUser, book)" ng-hide="book.isBookmarked">
-        <i class="icon-bookmark-empty"></i>
-      </a>
+  <li data-ng-repeat="book in books" class="book" ng-class="{'is-favourited': favourited[book.id]}">
+    <a class="favourite" ng-click="addToFavourites(currentUser, book)" ng-hide="favourited[book.id]">
+      <i class="fa fa-star-o"></i>
+    </a>
 
-      <a class="bookmark" ng-click="removeBookmark(currentUser, book)" ng-show="book.isBookmarked">
-        <i class="icon-bookmark"></i>
-      </a>
+    <a class="favourite" ng-click="removeFromFavourites(currentUser, book)" ng-show="favourited[book.id]">
+      <i class="fa fa-star"></i>
+    </a>
 
-      <h3 class="book-title">{{ book.title }}</h3>
-      <p class="book-author">{{ book.author }}</p>
-      <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
-        <i class="icon-cloud-download"></i>
-        download
-      </a>
-    </article>
+    <h3 class="book-title">{{ book.title }}</h3>
+    <p class="book-author">{{ book.author }}</p>
+    <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
+      <i class="fa fa-cloud-download"></i>
+      download
+    </a>
   </li>
 </ul>
