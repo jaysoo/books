@@ -15,7 +15,8 @@ class App < Sinatra::Application
    end
 
    delete "/favourites/:user_id/:book_id" do
-     Favourite.where(fav_data(params)).first.delete
+     fav = Favourite.where(fav_data(params)).first
+     fav.delete if fav
      status 204
      json ''
    end

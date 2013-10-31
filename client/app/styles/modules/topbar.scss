@@ -9,6 +9,11 @@
 
   transition: all 300ms ease-in-out;
 
+  .container {
+    max-width: 940px;
+    width: auto;
+  }
+
   .brand {
     margin-left: 0;
     font-size: 40px;

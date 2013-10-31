@@ -5,6 +5,10 @@ define(['common/helpers/object'], function(OH) {
     OH.setData(this, userData);
   }
 
+  User.prototype = {
+    get id() { return this._id; }
+  };
+
   var props = {
     avatarUrl: function() {
       return this.image;

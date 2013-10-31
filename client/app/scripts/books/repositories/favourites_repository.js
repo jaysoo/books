@@ -1,10 +1,6 @@
 'use strict';
 
-define([
-  'lodash',
-  'app'
-
-], function(_, App) {
+define(['lodash', 'app'], function(_, App) {
   App.factory('FavouritesRepository', ['$resource', '$q',
     function ($resource, $q) {
       var Favourite = $resource('/favourites/:user_id/:book_id', {
@@ -12,6 +8,14 @@ define([
         book_id: '@book_id'
       }, {
         add: { method: 'PUT' }
+      });
+
+      Object.defineProperties(Favourite.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
       });
 
       return {
@@ -24,21 +28,28 @@ define([
         },
 
         add: function(user, book) {
+          var deferred = $q.defer();
+
           var fav = new Favourite({
-            user_id: user._id,
-            book_id: book._id
+            user_id: user.id,
+            book_id: book.id
           });
 
-          fav.$add();
+          fav.$add(function() {
+            deferred.resolve(fav);
+          });
+
+          return deferred.promise;
         },
 
         remove: function(user, book) {
-          var fav = Favourite.get({
-            user_id: user._id,
-            book_id: book._id
-          }, function() {
-            fav.$remove();
+          var deferred = $q.defer();
+
+          Favourite.remove({ user_id: user.id, book_id: book.id }, function() {
+            deferred.resolve();
           });
+
+          return deferred.promise;
         }
       };
     }

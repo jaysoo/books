@@ -1,8 +1,9 @@
 'use strict';
 
-define(['lodash', 'app', 'common/helpers/object'], function(_, App, OH) {
+define(['lodash', 'app'], function(_, App) {
   App.factory('BooksRepository', ['$resource', '$q',
     function($resource, $q) {
+
       var Book = $resource('/books/:id', {
         id: '@id'
       }, {
@@ -12,9 +13,13 @@ define(['lodash', 'app', 'common/helpers/object'], function(_, App, OH) {
         }
       });
 
-      Book.prototype = {
-        get id() { return this._id; }
-      };
+      Object.defineProperties(Book.prototype, {
+        'id': {
+          get: function() {
+            return this._id;
+          }
+        }
+      });
 
       return {
         list: function() {

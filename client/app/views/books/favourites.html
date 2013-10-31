@@ -1,6 +1,10 @@
 <ul class="books-list favourites">
   <li data-ng-repeat="book in books">
     <article class="book">
+      <a class="favourite" ng-click="removeFavourite(currentUser, book)">
+        <i class="fa fa-trash-o"></i>
+      </a>
+
       <h3 class="book-title">{{ book.title }}</h3>
       <p class="book-author">{{ book.author }}</p>
       <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
