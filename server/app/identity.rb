@@ -10,13 +10,13 @@ class App < Sinatra::Application
         "image" => auth.info.image
       }
 
-      if is_nulogy_user? auth.info.email
-        User.create!(user_data)
-        session[:user_uid] = user_data["uid"]
-        redirect "/#access_token=#{session[:session_id]}"
-      else
-        redirect "/#login_failure=not_nulogy_user"
-      end
+      #if is_nulogy_user? auth.info.email
+      User.create!(user_data)
+      session[:user_uid] = user_data["uid"]
+      redirect "/#access_token=#{session[:session_id]}"
+      # else
+      #   redirect "/#login_failure=not_nulogy_user"
+      # end
     end
   end
 
