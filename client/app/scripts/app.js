@@ -13,7 +13,7 @@ define([
   'angular-resource',
   'angular-route',
   'angular-fire',
-  'bootstrap-dropdown',
+  'angular-bootstrap',
 
   // Security
   'security/controllers/login-form',
@@ -29,6 +29,7 @@ define([
     'ngResource',
     'ngRoute',
     'firebase',
+    'ui.bootstrap',
     'security',
     'security.authorization',
     'security.login.form'
@@ -49,7 +50,7 @@ define([
           }
         }
       })
-      .when('/', {
+      .when('/books', {
         templateUrl: 'views/books/books_list.html',
         controller: 'BooksListCtrl'
       })
@@ -66,7 +67,7 @@ define([
         controller: 'SessionsCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/sessions'
       });
   }]);
 

@@ -11,11 +11,11 @@ require({
     'angular-route': '../bower_components/angular-route/angular-route',
     'angular-sanitize': '../bower_components/angular-sanitize/angular-sanitize',
     'angular-fire': '//cdn.firebase.com/libs/angularfire/0.3.0/angularfire',
-    'bootstrap-dropdown': '../bower_components/bootstrap-sass/js/bootstrap-dropdown',
     'firebase': '//cdn.firebase.com/v0/firebase',
     'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login',
     'persona-sdk': 'https://login.persona.org/include',
-    'filepicker': '//api.filepicker.io/v1/filepicker'
+    'filepicker': '//api.filepicker.io/v1/filepicker',
+    'angular-bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls'
   },
   shim: {
     'lodash': {
@@ -29,6 +29,7 @@ require({
     'angular-resource': ['angular'],
     'angular-route': ['angular'],
     'angular-sanitize': ['angular'],
+    'angular-bootstrap': ['angular'],
     'angular-fire': ['angular', 'firebase', 'firebase-simple-login'],
     'bootstrap-dropdown': ['jquery'],
     'firebase': {
