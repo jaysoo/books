@@ -87,3 +87,15 @@
     color: $red;
   }
 }
+
+
+.book-details {
+  .favourite {
+    vertical-align: top;
+    display: inline-block;
+    visibility: visible;
+    position: static;
+    right: auto;
+    top: auto;
+  }
+}

@@ -54,6 +54,10 @@ define([
         templateUrl: 'views/books/books_list.html',
         controller: 'BooksListCtrl'
       })
+      .when('/books/:bookId', {
+        templateUrl: 'views/books/book_details.html',
+        controller: 'BookDetailsCtrl'
+      })
       .when('/favourites', {
         templateUrl: 'views/books/favourites.html',
         controller: 'FavouritesCtrl'
@@ -94,7 +98,7 @@ define([
       checkAuth();
 
       $rootScope.$on('$routeChangeStart', function(evt, next) {
-        if (next.$$route.controller !== 'LoginCtrl') {
+        if (next && next.$$route.controller !== 'LoginCtrl') {
           checkAuth();
         }
       });

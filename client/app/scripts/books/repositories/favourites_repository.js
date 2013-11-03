@@ -27,6 +27,19 @@ define(['lodash', 'app'], function(_, App) {
           return deferred.promise;
         },
 
+        isFavourited: function(user, book) {
+          var deferred = $q.defer();
+
+          Favourite.get({
+            user_id: user.id,
+            book_id: book.id
+          }, function(data) {
+            deferred.resolve(data.isFavourited);
+          });
+
+          return deferred.promise;
+        },
+
         add: function(user, book) {
           var deferred = $q.defer();
 

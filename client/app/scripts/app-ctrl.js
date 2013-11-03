@@ -19,7 +19,7 @@ define(function() {
     };
 
     $scope.showBooks = function() {
-      $location.path('/');
+      $location.path('/books');
     };
 
     $scope.showBookClub = function() {

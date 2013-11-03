@@ -4,7 +4,7 @@ class App < Sinatra::Application
    end
 
    get "/favourites/:user_id/:book_id" do
-     json Favourite.where(fav_data(params)).first
+     json isFavourited: Favourite.where(fav_data(params)).exists?
    end
 
    put "/favourites/:user_id/:book_id" do
@@ -16,7 +16,6 @@ class App < Sinatra::Application
      fav = Favourite.where(fav_data(params)).first
      fav.delete if fav
      status 204
-     json ''
    end
 
    private

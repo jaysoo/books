@@ -1,0 +1,13 @@
+<div class="book-details">
+  <h2>
+    <a class="favourite" ng-click="addToFavourites(currentUser, book)" ng-hide="isFavourited">
+      <i class="fa fa-star-o"></i>
+    </a>
+    <a class="favourite" ng-click="removeFromFavourites(currentUser, book)" ng-show="isFavourited">
+      <i class="fa fa-star"></i>
+    </a>
+    {{book.title}}
+  </h2>
+  <p>{{book.author}}</p>
+  <p>{{book.meta.url}}</p>
+</div>

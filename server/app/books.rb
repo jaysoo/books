@@ -5,13 +5,10 @@ class App < Sinatra::Application
 
    get "/books/:ids" do
      ids = params[:ids].split(',')
+
      results = Book.send(:find, *ids)
 
-     if results.kind_of?(Array)
-       json results
-     else
-       json [results]
-     end
+     json results
    end
 
    post "/books" do

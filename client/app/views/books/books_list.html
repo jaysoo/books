@@ -15,7 +15,7 @@
       <i class="fa fa-star"></i>
     </a>
 
-    <h3 class="book-title">{{ book.title }}</h3>
+    <h3 class="book-title"><a ng-href="#/books/{{book.id}}">{{ book.title }}</a></h3>
     <p class="book-author">{{ book.author }}</p>
     <a download class="book-attachment" href="{{book.meta.url}}" target="_blank" ng-show="book.meta.url">
       <i class="fa fa-cloud-download"></i>
