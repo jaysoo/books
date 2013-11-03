@@ -1,8 +1,8 @@
 'use strict';
 
 define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
-  App.controller('SessionsCtrl', ['$scope', 'SessionsRepository', 'VotesRepository', 'BooksRepository', 'SecurityService',
-    function($scope, SessionsRepository, VotesRepository, BooksRepository, SecurityService) {
+  App.controller('SessionsCtrl', ['$scope', '$modal', 'SessionsRepository', 'VotesRepository', 'BooksRepository', 'SecurityService',
+    function($scope, $modal, SessionsRepository, VotesRepository, BooksRepository, SecurityService) {
       var votesRef = new Firebase('https://nulogy-books.firebaseio.com/votes');
       var lastEventName = sessionStorage.getItem('events:votes:last');
 
@@ -20,7 +20,19 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       $scope.voted = {};
 
       $scope.addSession = function() {
-        SessionsRepository.create().then(fetchSessions);
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/sessions/add_session_confirmation.html',
+          controller: StartSessionConfirmationCtrl,
+          resolve: {
+            items: function () {
+              return $scope.items;
+            }
+          }
+        });
+
+        modalInstance.result.then(function () {
+          SessionsRepository.create().then(fetchSessions);
+        });
       };
 
       $scope.$watch('currentSession', function(currentSession) {
@@ -97,4 +109,14 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       }
     }
   ]);
+
+  function StartSessionConfirmationCtrl($scope, $modalInstance) {
+    $scope.ok = function () {
+      $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  }
 });
