@@ -6,7 +6,7 @@ class App < Sinatra::Application
    get "/books/:ids" do
      ids = params[:ids].split(',')
 
-     results = Book.send(:find, *ids)
+     results = Book.in(id: ids)
 
      json results
    end

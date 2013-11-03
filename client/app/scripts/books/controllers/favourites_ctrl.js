@@ -9,8 +9,8 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       $scope.removeFavourite = function(user, book) {
         FavouritesRepository.remove(user, book);
 
-        $scope.books = _.without($scope.books, function(b) {
-          return b.id === book.id;
+        $scope.books = _.filter($scope.books, function(b) {
+          return b.id !== book.id;
         });
       };
 
