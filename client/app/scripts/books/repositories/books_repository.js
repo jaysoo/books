@@ -51,6 +51,10 @@ define(['lodash', 'app'], function(_, App) {
         create: function(bookData) {
           var book = new Book(bookData);
           return book.$save();
+        },
+
+        remove: function(book) {
+          return book.$remove();
         }
       };
     }

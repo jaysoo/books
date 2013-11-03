@@ -1,8 +1,8 @@
 'use strict';
 
 define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
-  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
-    function($scope, $routeParams, FavouritesRepository, SecurityService, BooksRepository) {
+  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
+    function($scope, $routeParams, $location, $modal, FavouritesRepository, SecurityService, BooksRepository) {
 
       BooksRepository.get($routeParams.bookId).then(function(book) {
         $scope.book = book;
@@ -21,6 +21,34 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
         FavouritesRepository.remove(user, book);
         $scope.isFavourited = false;
       };
+
+      $scope.deleteBook = function(book) {
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/books/book_delete_confirmation.html',
+          controller: DeleteBookConfirmationCtrl,
+          resolve: {
+            items: function () {
+              return $scope.items;
+            }
+          }
+        });
+
+        modalInstance.result.then(function () {
+          BooksRepository.remove(book).then(function() {
+            $location.path('/books');
+          });
+        });
+      };
     }
   ]);
+
+  function DeleteBookConfirmationCtrl($scope, $modalInstance) {
+    $scope.ok = function () {
+      $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  }
 });

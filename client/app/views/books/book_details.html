@@ -1,4 +1,10 @@
 <div class="book-details">
+  <div class="pull-right">
+    <button class="btn btn-danger" ng-click="deleteBook(book)">
+      <i class="fa fa-minus-circle"></i>
+      Delete
+    </button>
+  </div>
   <h2>
     <a class="favourite" ng-click="addToFavourites(currentUser, book)" ng-hide="isFavourited">
       <i class="fa fa-star-o"></i>
