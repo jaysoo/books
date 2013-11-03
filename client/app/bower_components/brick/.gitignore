@@ -1,9 +1,0 @@
-.sass-cache
-node_modules
-.DS_Store
-brick-*.zip
-/index.html
-/docs.html
-/download.html
-/demos
-_component-ui-defaults.css
