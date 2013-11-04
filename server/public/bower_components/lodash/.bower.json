@@ -20,15 +20,14 @@
     "test",
     "vendor"
   ],
-  "homepage": "https://github.com/bestiejs/lodash",
+  "homepage": "https://github.com/lodash/lodash",
   "_release": "2.0.0",
   "_resolution": {
     "type": "version",
     "tag": "2.0.0",
     "commit": "4411b34adeabd31e6567b10bc1cd85c46372a2c4"
   },
-  "_source": "git://github.com/bestiejs/lodash.git",
+  "_source": "git://github.com/lodash/lodash.git",
   "_target": "~2.0.0",
-  "_originalSource": "lodash",
-  "_direct": true
+  "_originalSource": "lodash"
 }

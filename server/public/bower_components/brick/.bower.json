@@ -28,6 +28,5 @@
   },
   "_source": "git://github.com/mozilla/brick.git",
   "_target": "~1.0.0-beta7",
-  "_originalSource": "brick",
-  "_direct": true
+  "_originalSource": "brick"
 }

@@ -1,8 +1,8 @@
-<p class="add-session">
-  <a ng-click="addSession()">
-    <i class="fa fa-plus-sign"></i>
-    Start New Session
-  </a>
+<p class="add-session pull-right">
+  <button class="btn btn-small btn-success" ng-click="addSession()">
+    <i class="fa fa-plus-circle"></i>
+    Start new session
+  </button>
 </p>
 
 <div class="sessions-current">
@@ -13,27 +13,35 @@
   <p>{{currentSession.notes}}</p>
 
   <h3>Book Votes</h3>
-  <ul>
-    <li ng-repeat="book in books">
-      <p>
-        {{book.title}} &mdash; {{book.author}}
-        <span ng-show="voted[book.id]">
-          <a ng-click="removeVoteFor(currentSession, book, currentUser)">
-            <i class="fa fa-check-square-o"></i>
-          </a>
-        </span>
-        <span ng-hide="voted[book.id]">
-          <a ng-click="voteFor(currentSession, book, currentUser)">
-            <i class="fa fa-square-o"></i>
-          </a>
-        </span>
-      </p>
-      <p class="vote-count">
-        Votes:
-        <strong>{{votesByBookId[book.id] || 0}}</strong>
-      </p>
-    </li>
-  </ul>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th class="span2">Your vote</th>
+        <th class="span2">Total votes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="book in books">
+        <td><a ng-href="#/books/{{book.id}}">{{book.title}}</a></td>
+        <td>{{book.author}}</td>
+        <td clas="span2">
+          <span ng-show="voted[book.id]">
+            <a ng-click="removeVoteFor(currentSession, book, currentUser)">
+              <i class="fa fa-check-square-o"></i>
+            </a>
+          </span>
+          <span ng-hide="voted[book.id]">
+            <a ng-click="voteFor(currentSession, book, currentUser)">
+              <i class="fa fa-square-o"></i>
+            </a>
+          </span>
+        </td>
+        <td class="span2">{{votesByBookId[book.id] || 0}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div ng-show="previousSessions.length > 0">
