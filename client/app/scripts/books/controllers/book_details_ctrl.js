@@ -1,8 +1,10 @@
+/* globals google */
+
 'use strict';
 
-define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
-  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
-    function($scope, $routeParams, $location, $modal, FavouritesRepository, SecurityService, BooksRepository) {
+define(['lodash', 'app', 'goog!picker'], function(_, App) {
+  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'Config', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
+    function($scope, $routeParams, $location, $modal, Config, FavouritesRepository, SecurityService, BooksRepository) {
       $scope.mode = 'show';
 
       BooksRepository.get($routeParams.bookId).then(function(book) {
@@ -53,16 +55,42 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
           });
         });
       };
+
+      $scope.attachFile = function() {
+        pickFile();
+      };
+
+      function DeleteBookConfirmationCtrl($scope, $modalInstance) {
+        $scope.ok = function () {
+          $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+          $modalInstance.dismiss('cancel');
+        };
+      }
+
+      function pickFile() {
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes('image/png,image/jpeg,image/jpg');
+        var picker = new google.picker.PickerBuilder()
+          .enableFeature(google.picker.Feature.NAV_HIDDEN)
+          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+          .setAppId(Config.GOOGLE_APP_ID)
+          .addView(view)
+          .addView(new google.picker.DocsUploadView())
+          .setDeveloperKey(Config.GOOGLE_API_KEY)
+          .setCallback(pickerCallback)
+          .build();
+        picker.setVisible(true);
+      }
+
+      function pickerCallback(data) {
+        if (data.action === google.picker.Action.PICKED) {
+          var fileId = data.docs[0].id;
+          window.alert('The user selected: ' + fileId);
+        }
+      }
     }
   ]);
-
-  function DeleteBookConfirmationCtrl($scope, $modalInstance) {
-    $scope.ok = function () {
-      $modalInstance.close();
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }
 });

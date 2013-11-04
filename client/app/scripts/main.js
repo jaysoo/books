@@ -15,7 +15,10 @@ require({
     'firebase-simple-login': '//cdn.firebase.com/v0/firebase-simple-login',
     'persona-sdk': 'https://login.persona.org/include',
     'filepicker': '//api.filepicker.io/v1/filepicker',
-    'angular-bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls'
+    'angular-bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
+    'async': '../bower_components/requirejs-plugins/src/async',
+    'propertyParser': '../bower_components/requirejs-plugins/src/propertyParser',
+    'goog': '../bower_components/requirejs-plugins/src/goog'
   },
   shim: {
     'lodash': {
