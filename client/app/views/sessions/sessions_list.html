@@ -24,7 +24,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="book in books">
-        <td>{{book.title}}</td>
+        <td><a ng-href="#/books/{{book.id}}">{{book.title}}</a></td>
         <td>{{book.author}}</td>
         <td clas="span2">
           <span ng-show="voted[book.id]">

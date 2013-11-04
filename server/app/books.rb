@@ -8,7 +8,11 @@ class App < Sinatra::Application
 
      results = Book.in(id: ids)
 
-     json results
+     if ids.size > 1
+       json results
+     else
+       json results.first
+     end
    end
 
    post "/books" do
