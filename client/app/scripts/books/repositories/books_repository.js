@@ -10,6 +10,10 @@ define(['lodash', 'app'], function(_, App) {
         find: {
           method: 'GET',
           isArray: true
+        },
+
+        update: {
+          method: 'PUT'
         }
       });
 
@@ -51,6 +55,10 @@ define(['lodash', 'app'], function(_, App) {
         create: function(bookData) {
           var book = new Book(bookData);
           return book.$save();
+        },
+
+        update: function(book) {
+          return book.$update();
         },
 
         remove: function(book) {

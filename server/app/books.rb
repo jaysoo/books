@@ -21,6 +21,13 @@ class App < Sinatra::Application
      json book_data
    end
 
+   put "/books/:id" do
+     book_data = JSON.parse request.body.read
+     book = Book.find(params[:id])
+     book.update_attributes(book_data)
+     json book
+   end
+
    delete "/books/:id" do
      book = Book.find(params[:id])
      book.delete if book

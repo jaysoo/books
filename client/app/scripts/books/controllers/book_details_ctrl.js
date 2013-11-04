@@ -3,6 +3,7 @@
 define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
   App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
     function($scope, $routeParams, $location, $modal, FavouritesRepository, SecurityService, BooksRepository) {
+      $scope.mode = 'show';
 
       BooksRepository.get($routeParams.bookId).then(function(book) {
         $scope.book = book;
@@ -20,6 +21,19 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       $scope.removeFromFavourites = function(user, book) {
         FavouritesRepository.remove(user, book);
         $scope.isFavourited = false;
+      };
+
+      $scope.showEdit = function() {
+        $scope.mode = 'edit';
+      };
+
+      $scope.hideEdit = function() {
+        $scope.mode = 'show';
+      };
+
+      $scope.updateBook = function(book) {
+        book.$update();
+        $scope.mode = 'show';
       };
 
       $scope.deleteBook = function(book) {
