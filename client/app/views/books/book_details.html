@@ -12,29 +12,39 @@
   <p>{{book.author}}</p>
   <p>{{book.meta.url}}</p>
 
-  <h4>
-    Attachments
-  </h4>
+  <div class="well">
+    <h4>
+      Attachments
+    </h4>
+    <ul class="unstyled">
+      <li ng-repeat="attachment in book.attachments">
+        <i class="fa fa-paperclip"></i>
+        <a ng-href="{{attachment.url}}" download>{{attachment.name}}</a>
+        <a ng-click="removeAttachment(attachment)">
+          <i class="fa fa-times"></i>
+        </a>
+      </li>
+    </ul>
+    <a ng-click="attachFile(book)">
+      <i class="fa fa-plus-circle"></i>
+      Attach file
+    </a>
+  </div>
 
-  <ul class="unstyled">
-    <li ng-repeat="attachment in book.attachments">
-      <i class="fa fa-paperclip"></i>
-      <a ng-href="{{attachment.url}}" target="_blank">{{attachment.name}}</a>
-    </li>
-  </ul>
-
-  <button class="btn" ng-click="showEdit()">
-    <i class="fa fa-pencil"></i>
-    Edit
-  </button>
-  <button class="btn btn-danger" ng-click="deleteBook(book)">
-    <i class="fa fa-minus-circle"></i>
-    Delete
-  </button>
+  <div class="gutter-top">
+    <button class="btn" ng-click="showEdit()">
+      <i class="fa fa-pencil"></i>
+      Edit
+    </button>
+    <button class="btn btn-danger" ng-click="deleteBook(book)">
+      <i class="fa fa-minus-circle"></i>
+      Delete
+    </button>
+  </div>
 </div>
 
 <form class="form form-horizontal" ng-submit="updateBook(book)" ng-show="mode == 'edit'">
-  <h2>Edit book</h2>
+  <h2>Edit book details</h2>
 
   <div class="control-group">
     <label class="control-label">
@@ -54,31 +64,13 @@
     </div>
   </div>
 
-  <div class="control-group">
-    <label class="control-label">
-      Attachments:
-    </label>
-    <div class="controls">
-      <ul class="unstyled">
-        <li ng-repeat="attachment in book.attachments">
-          <a ng-href="{{attachment.url}}" download>{{attachment.name}}</a>
-          <a ng-click="removeAttachment(attachment)">
-            <i class="fa fa-times"></i>
-          </a>
-        </li>
-      </ul>
-      <a ng-click="attachFile(book)">
-        <i class="fa fa-plus-circle"></i>
-        Attach file
-      </a>
-    </div>
+  <div>
+    <button class="btn btn-success" type="submit">
+      <i class="fa fa-check"></i>
+      Save
+    </button>
+    <button class="btn" ng-click="hideEdit()">
+      Cancel
+    </button>
   </div>
-
-  <button class="btn btn-success" type="submit">
-    <i class="fa fa-check"></i>
-    Save
-  </button>
-  <button class="btn" ng-click="hideEdit()">
-    Cancel
-  </button>
 </form>

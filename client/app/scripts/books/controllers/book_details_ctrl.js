@@ -41,12 +41,7 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
       $scope.deleteBook = function(book) {
         var modalInstance = $modal.open({
           templateUrl: 'partials/books/book_delete_confirmation.html',
-          controller: DeleteBookConfirmationCtrl,
-          resolve: {
-            items: function () {
-              return $scope.items;
-            }
-          }
+          controller: DeleteBookConfirmationCtrl
         });
 
         modalInstance.result.then(function () {
@@ -56,8 +51,30 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
         });
       };
 
-      $scope.attachFile = function() {
-        pickFile();
+      $scope.attachFile = function(book) {
+        var picker = new google.picker.PickerBuilder()
+          .setAppId(Config.GOOGLE_APP_ID)
+          .setDeveloperKey(Config.GOOGLE_API_KEY)
+          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+          .addView(google.picker.ViewId.PDFS)
+          .addView(google.picker.ViewId.DOCS)
+          .addView(new google.picker.DocsUploadView())
+          .setCallback(function pickerCallback(data) {
+            if (data.action === google.picker.Action.PICKED) {
+              data.docs.forEach(function(doc) {
+                book.attachments.push({
+                  id: doc.id,
+                  name: doc.name,
+                  url: doc.url,
+                  iconUrl: doc.iconUrl,
+                  mimeType: doc.mimeType
+                });
+              });
+              book.$update();
+            }
+          })
+          .build();
+        picker.setVisible(true);
       };
 
       $scope.removeAttachment = function(attachment) {
@@ -72,35 +89,6 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
         $scope.cancel = function () {
           $modalInstance.dismiss('cancel');
         };
-      }
-
-      function pickFile() {
-        var picker = new google.picker.PickerBuilder()
-          .setAppId(Config.GOOGLE_APP_ID)
-          .setDeveloperKey(Config.GOOGLE_API_KEY)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-          .addView(google.picker.ViewId.PDFS)
-          .addView(google.picker.ViewId.DOCS)
-          .addView(new google.picker.DocsUploadView())
-          .setCallback(pickerCallback)
-          .build();
-        picker.setVisible(true);
-      }
-
-      function pickerCallback(data) {
-        if (data.action === google.picker.Action.PICKED) {
-          var attachments = _.map(data.docs, function(doc) {
-            return {
-              id: doc.id,
-              name: doc.name,
-              url: doc.url,
-              iconUrl: doc.iconUrl,
-              mimeType: doc.mimeType
-            };
-          });
-
-          $scope.book.attachments = _.flatten([$scope.book.attachments, attachments]);
-        }
       }
     }
   ]);
