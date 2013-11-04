@@ -12,6 +12,17 @@
   <p>{{book.author}}</p>
   <p>{{book.meta.url}}</p>
 
+  <h4>
+    Attachments
+  </h4>
+
+  <ul class="unstyled">
+    <li ng-repeat="attachment in book.attachments">
+      <i class="fa fa-paperclip"></i>
+      <a ng-href="{{attachment.url}}" target="_blank">{{attachment.name}}</a>
+    </li>
+  </ul>
+
   <button class="btn" ng-click="showEdit()">
     <i class="fa fa-pencil"></i>
     Edit
@@ -48,6 +59,14 @@
       Attachments:
     </label>
     <div class="controls">
+      <ul class="unstyled">
+        <li ng-repeat="attachment in book.attachments">
+          <a ng-href="{{attachment.url}}" download>{{attachment.name}}</a>
+          <a ng-click="removeAttachment(attachment)">
+            <i class="fa fa-times"></i>
+          </a>
+        </li>
+      </ul>
       <a ng-click="attachFile(book)">
         <i class="fa fa-plus-circle"></i>
         Attach file

@@ -60,6 +60,10 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
         pickFile();
       };
 
+      $scope.removeAttachment = function(attachment) {
+        $scope.book.attachments = _.without($scope.book.attachments, attachment);
+      };
+
       function DeleteBookConfirmationCtrl($scope, $modalInstance) {
         $scope.ok = function () {
           $modalInstance.close();
@@ -71,15 +75,13 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
       }
 
       function pickFile() {
-        var view = new google.picker.View(google.picker.ViewId.DOCS);
-        view.setMimeTypes('image/png,image/jpeg,image/jpg');
         var picker = new google.picker.PickerBuilder()
-          .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .setAppId(Config.GOOGLE_APP_ID)
-          .addView(view)
-          .addView(new google.picker.DocsUploadView())
           .setDeveloperKey(Config.GOOGLE_API_KEY)
+          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+          .addView(google.picker.ViewId.PDFS)
+          .addView(google.picker.ViewId.DOCS)
+          .addView(new google.picker.DocsUploadView())
           .setCallback(pickerCallback)
           .build();
         picker.setVisible(true);
@@ -87,8 +89,17 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
 
       function pickerCallback(data) {
         if (data.action === google.picker.Action.PICKED) {
-          var fileId = data.docs[0].id;
-          window.alert('The user selected: ' + fileId);
+          var attachments = _.map(data.docs, function(doc) {
+            return {
+              id: doc.id,
+              name: doc.name,
+              url: doc.url,
+              iconUrl: doc.iconUrl,
+              mimeType: doc.mimeType
+            };
+          });
+
+          $scope.book.attachments = _.flatten([$scope.book.attachments, attachments]);
         }
       }
     }
