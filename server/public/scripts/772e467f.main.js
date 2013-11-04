@@ -32090,6 +32090,8 @@ define('books/controllers/book_details_ctrl',['lodash', 'app', 'goog!picker'], f
       };
 
       $scope.attachFile = function(book) {
+        book.attachments = book.attachments || [];
+
         var picker = new google.picker.PickerBuilder()
           .setAppId(Config.GOOGLE_APP_ID)
           .setDeveloperKey(Config.GOOGLE_API_KEY)
