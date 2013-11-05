@@ -52,7 +52,14 @@ class App < Sinatra::Application
    end
 
    put "/sessions/:session_id/votes/:book_id/:user_id" do
+     user = User.find(params[:user_id])
      vote = Vote.find_or_create_by(vote_data(params))
+     vote.update_attributes({
+       user_email: user.email,
+       user_first_name: user.first_name,
+       user_last_name: user.last_name,
+       user_image: user.image
+     })
      json vote
    end
 

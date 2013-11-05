@@ -113,8 +113,8 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
               $scope.voted[vote.book_id] = true;
             }
 
-            votes[vote.book_id] = votes[vote.book_id] || 0;
-            votes[vote.book_id]++;
+            votes[vote.book_id] = votes[vote.book_id] || [];
+            votes[vote.book_id].push(vote);
 
             return votes;
           }, {});
@@ -130,19 +130,29 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       }
 
       function onVote(book) {
-        ensureBookCount(book);
+        ensureBookVotes(book);
         $scope.voted[book.id] = true;
-        $scope.votesByBookId[book.id]++;
+
+        $scope.votesByBookId[book.id].push({
+          user_id: $scope.currentUser.id,
+          user_image: $scope.currentUser.image,
+          user_first_name: $scope.currentUser.first_name,
+          user_last_name: $scope.currentUser.last_name,
+          user_email: $scope.currentUser.email
+        });
       }
 
       function onUnvote(book) {
-        ensureBookCount(book);
+        ensureBookVotes(book);
         $scope.voted[book.id] = false;
-        $scope.votesByBookId[book.id]--;
+
+        $scope.votesByBookId[book.id] = _.filter($scope.votesByBookId[book.id], function(vote) {
+          return vote.user_id !== $scope.currentUser.id;
+        });
       }
 
-      function ensureBookCount(book) {
-        $scope.votesByBookId[book.id] = $scope.votesByBookId[book.id] || 0;
+      function ensureBookVotes(book) {
+        $scope.votesByBookId[book.id] = $scope.votesByBookId[book.id] || [];
       }
 
       function handleVoteEvent(ev) {

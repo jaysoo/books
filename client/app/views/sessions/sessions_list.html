@@ -61,7 +61,7 @@
           <th>Title</th>
           <th>Author</th>
           <th class="span2">Your vote</th>
-          <th class="span2">Total votes</th>
+          <th class="span2">Votes</th>
         </tr>
       </thead>
       <tbody>
@@ -80,7 +80,14 @@
               </a>
             </span>
           </td>
-          <td class="span2">{{votesByBookId[book.id] || 0}}</td>
+          <td class="span2">
+            <span class="vote-user" ng-repeat="vote in votesByBookId[book.id]">
+              <span class="no-image" ng-if="!vote.user_image" title="{{vote.user_first_name}}">
+                <i class="fa fa-user"></i>
+              </span>
+              <img ng-src="{{vote.user_image}}" ng-if="vote.user_image" title="{{vote.user_first_name}}"/>
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>

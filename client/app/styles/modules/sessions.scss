@@ -16,3 +16,28 @@
   vertical-align: top;
   margin-right: 10px;
 }
+
+.vote-user {
+  $size: 20px;
+
+  display: inline-block;
+  width: $size;
+  height: $size;
+  margin: 0 $nudge-size;
+  vertical-align: top;
+
+  img, .no-image {
+    width: $size;
+    height: $size;
+    display: inline-block;
+    border: 1px solid $gray-darker;
+    border-radius: 50%;
+    text-align: center;
+  }
+
+  .no-image {
+    background-color: $gray-lighter;
+    font-size: $font-large;
+    line-height: 1.5;
+  }
+}
