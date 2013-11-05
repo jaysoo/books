@@ -96,10 +96,10 @@
   <div ng-if="!currentSession.voting_enabled">
     <h3>
       Book:
-      <a ng-href="#/books/{{reading.id}}">{{reading.title}}</a>
+      <a ng-href="#/books/{{booksById[currentSession.book_id].id}}">{{booksById[currentSession.book_id].title}}</a>
     </h3>
     <ul class="unstyled">
-      <li ng-repeat="attachment in reading.attachments">
+      <li ng-repeat="attachment in booksById[currentSession.book_id].attachments">
         <i class="fa fa-paperclip"></i>
         <a href="{{attachment.url}}" target="_blank">{{attachment.name}}</a>
       </li>

@@ -125,7 +125,7 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
 
       function fetchBooks() {
         return BooksRepository.list().then(function(books) {
-          $scope.books = books;
+          updateBooksInScope($scope, books);
         });
       }
 
@@ -159,6 +159,18 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
         if (ev.session_id === $scope.currentSession.id && ev.user_id !== SecurityService.currentUser().id) {
           console.log('new vote', ev);
         }
+      }
+
+      function updateBooksInScope(scope, books) {
+        scope.books = books;
+        scope.booksById = booksById(books);
+      }
+
+      function booksById(books) {
+        return _.chain(books)
+                .map(function(book) { return [book.id, book]; })
+                .zipObject()
+                .value();
       }
 
       function updateReading(books, bookId) {
