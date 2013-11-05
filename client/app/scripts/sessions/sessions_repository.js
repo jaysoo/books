@@ -3,8 +3,24 @@
 define(['lodash', 'app'], function(_, App) {
   App.factory('SessionsRepository', ['$resource', '$q',
     function ($resource, $q) {
-      var Session = $resource('/sessions/:id', {
+      var Session = $resource('/sessions/:id/:command', {
         id: '@id'
+      }, {
+        update: {
+          method: 'PUT'
+        },
+        disableVoting: {
+          method: 'PUT',
+          params: {
+            command: 'disable_voting'
+          }
+        },
+        enableVoting: {
+          method: 'PUT',
+          params: {
+            command: 'enable_voting'
+          }
+        }
       });
 
       Object.defineProperties(Session.prototype, {
@@ -39,7 +55,7 @@ define(['lodash', 'app'], function(_, App) {
         remove: function(session) {
           var deferred = $q.defer();
 
-          session.remove({id: session.id}, function() {
+          session.$remove({id: session.id}, function() {
             deferred.resolve();
           });
 

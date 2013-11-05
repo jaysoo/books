@@ -3,6 +3,8 @@
 define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
   App.controller('SessionsCtrl', ['$scope', '$modal', 'SessionsRepository', 'VotesRepository', 'BooksRepository', 'SecurityService',
     function($scope, $modal, SessionsRepository, VotesRepository, BooksRepository, SecurityService) {
+      $scope.mode = 'show';
+
       var votesRef = new Firebase('https://nulogy-books.firebaseio.com/votes');
       var lastEventName = sessionStorage.getItem('events:votes:last');
 
@@ -31,12 +33,38 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
         });
 
         modalInstance.result.then(function () {
-          SessionsRepository.create().then(fetchSessions);
+          SessionsRepository.create().then(function() {
+            fetchSessions().then(function() {
+              $scope.mode = 'edit';
+            });
+          });
         });
       };
 
       $scope.$watch('currentSession', function(currentSession) {
         fetchVotesFor(currentSession);
+      });
+
+      $scope.$watch('currentSession.voting_enabled', function(newValue, oldValue) {
+        if (!$scope.currentSession || undefined === oldValue) {
+          return;
+        }
+
+        if (newValue) {
+          $scope.currentSession.$enableVoting();
+        } else {
+          $scope.currentSession.$disableVoting();
+        }
+      });
+
+      $scope.$watch('currentSession.book_id', function(bookId) {
+        updateReading($scope.books, bookId);
+      });
+
+      $scope.$watch('books', function(books) {
+        if ($scope.currentSession) {
+          updateReading(books, $scope.currentSession.book_id);
+        }
       });
 
       $scope.voteFor = function(session, book, user) {
@@ -49,11 +77,26 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
         onUnvote(book);
       };
 
+      $scope.showEdit = function() {
+        $scope.sessionToEdit = _.clone($scope.currentSession);
+        $scope.mode = 'edit';
+      };
+
+      $scope.hideEdit = function() {
+        $scope.mode = 'show';
+      };
+
+      $scope.saveSession = function() {
+        _.merge($scope.currentSession, $scope.sessionToEdit);
+        $scope.currentSession.$update();
+        $scope.mode = 'show';
+      };
+
       fetchSessions();
       fetchBooks();
 
       function fetchSessions() {
-        SessionsRepository.list().then(function(sessions) {
+        return SessionsRepository.list().then(function(sessions) {
           if (sessions.length > 0) {
             $scope.currentSession = sessions[0];
             $scope.previousSessions = _.rest(sessions);
@@ -64,7 +107,7 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       function fetchVotesFor(currentSession) {
         if (!currentSession) { return; }
 
-        VotesRepository.list(currentSession).then(function(votes) {
+        return VotesRepository.list(currentSession).then(function(votes) {
           var votesByBookId = _.reduce(votes, function(votes, vote) {
             if (vote.user_id === $scope.currentUser.id) {
               $scope.voted[vote.book_id] = true;
@@ -81,7 +124,7 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
       }
 
       function fetchBooks() {
-        BooksRepository.list().then(function(books) {
+        return BooksRepository.list().then(function(books) {
           $scope.books = books;
         });
       }
@@ -106,6 +149,15 @@ define(['lodash', 'app', 'firebase'], function(_, App, Firebase) {
         if (ev.session_id === $scope.currentSession.id && ev.user_id !== SecurityService.currentUser().id) {
           console.log('new vote', ev);
         }
+      }
+
+      function updateReading(books, bookId) {
+        if (!books || !bookId) {
+          return;
+        }
+
+        var book = _.find(books, function(b) { return b.id === bookId; });
+        $scope.reading = book;
       }
     }
   ]);

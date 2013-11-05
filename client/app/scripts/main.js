@@ -18,7 +18,8 @@ require({
     'angular-bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     'async': '../bower_components/requirejs-plugins/src/async',
     'propertyParser': '../bower_components/requirejs-plugins/src/propertyParser',
-    'goog': '../bower_components/requirejs-plugins/src/goog'
+    'goog': '../bower_components/requirejs-plugins/src/goog',
+    'moment': '../bower_components/moment/moment'
   },
   shim: {
     'lodash': {

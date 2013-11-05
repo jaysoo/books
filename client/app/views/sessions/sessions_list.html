@@ -1,56 +1,112 @@
-<p class="add-session pull-right">
+<div class="pull-right">
   <button class="btn btn-small btn-success" ng-click="addSession()">
     <i class="fa fa-plus-circle"></i>
     Start new session
   </button>
-</p>
+</div>
 
 <div class="sessions-current">
   <h2>Current Session</h2>
 
-  <p>{{currentSession.title}}</p>
-  <p>{{currentSession.created_at}}</p>
-  <p>{{currentSession.notes}}</p>
+  <div class="voting-control">
+    <span class="voting-label">Voting</span>
+    <div class="onoffswitch">
+      <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" ng-model="currentSession.voting_enabled" id="voting-enabled"/>
+      <label class="onoffswitch-label" for="voting-enabled">
+        <div class="onoffswitch-inner">
+          <div class="onoffswitch-active"><div class="onoffswitch-switch">ON</div></div>
+          <div class="onoffswitch-inactive"><div class="onoffswitch-switch">OFF</div></div>
+        </div>
+      </label>
+    </div>
+  </div>
 
-  <h3>Book Votes</h3>
-  <table class="table table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th class="span2">Your vote</th>
-        <th class="span2">Total votes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="book in books">
-        <td><a ng-href="#/books/{{book.id}}">{{book.title}}</a></td>
-        <td>{{book.author}}</td>
-        <td clas="span2">
-          <span ng-show="voted[book.id]">
-            <a ng-click="removeVoteFor(currentSession, book, currentUser)">
-              <i class="fa fa-check-square-o"></i>
-            </a>
-          </span>
-          <span ng-hide="voted[book.id]">
-            <a ng-click="voteFor(currentSession, book, currentUser)">
-              <i class="fa fa-square-o"></i>
-            </a>
-          </span>
-        </td>
-        <td class="span2">{{votesByBookId[book.id] || 0}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="well" ng-if="mode === 'show'">
+    <p><strong>Title:</strong> {{currentSession.title || '--'}}</p>
+    <p><strong>Created:</strong> {{currentSession.created_at | date:'longDate'}}</p>
+    <p><strong>Notes:</strong> {{currentSession.notes || '--'}}</p>
+    <p>
+      <button class="btn" ng-click="showEdit()">
+        <i class="fa fa-pencil"></i>
+        Edit
+      </button>
+    </p>
+  </div>
+
+  <form class="well" ng-if="mode === 'edit'" ng-submit="saveSession()">
+    <label>
+      Title:
+    </label>
+    <input class="input-xlarge" type="text" ng-model="sessionToEdit.title" autofocus />
+    <label>
+      Note:
+    </label>
+    <textarea class="input-xlarge" rows="5" ng-model="sessionToEdit.notes"></textarea>
+    <p>
+      <button class="btn btn-success" type="submit">
+        <i class="fa fa-check"></i>
+        Save
+      </button>
+      <button type="button" class="btn" ng-click="hideEdit()">
+        Cancel
+      </button>
+    </p>
+  </form>
+
+  <div ng-if="currentSession.voting_enabled">
+    <h3>Book Votes</h3>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th class="span2">Your vote</th>
+          <th class="span2">Total votes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="book in books">
+          <td><a ng-href="#/books/{{book.id}}">{{book.title}}</a></td>
+          <td>{{book.author}}</td>
+          <td clas="span2">
+            <span ng-show="voted[book.id]">
+              <a ng-click="removeVoteFor(currentSession, book, currentUser)">
+                <i class="fa fa-check-square-o"></i>
+              </a>
+            </span>
+            <span ng-hide="voted[book.id]">
+              <a ng-click="voteFor(currentSession, book, currentUser)">
+                <i class="fa fa-square-o"></i>
+              </a>
+            </span>
+          </td>
+          <td class="span2">{{votesByBookId[book.id] || 0}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div ng-if="!currentSession.voting_enabled">
+    <h3>
+      Book:
+      <a ng-href="#/books/{{reading.id}}">{{reading.title}}</a>
+    </h3>
+    <ul class="unstyled">
+      <li ng-repeat="attachment in reading.attachments">
+        <i class="fa fa-paperclip"></i>
+        <a href="{{attachment.url}}" target="_blank">{{attachment.name}}</a>
+      </li>
+    </ul>
+  </div>
 </div>
 
-<div ng-show="previousSessions.length > 0">
+<!--div ng-show="previousSessions.length > 0">
   <h2>Previous Sessions</h2>
   <ul>
     <li data-ng-repeat="session in previousSessions">
       <p>{{session.title}}</p>
-      <p>{{session.created_at}}</p>
+      <p>{{session.created_at | date:'longDate'}}</p>
       <p>{{session.notes}}</p>
     </li>
   </ul>
-</div>
+</div-->

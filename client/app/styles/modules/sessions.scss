@@ -4,3 +4,15 @@
   color: $gray-light;
   font-size: $font-smallest;
 }
+
+.voting-control {
+  margin: $gutter-size auto;
+}
+
+.voting-label {
+  font-size: $font-large;
+  display: inline-block;
+  line-height: 1.5;
+  vertical-align: top;
+  margin-right: 10px;
+}

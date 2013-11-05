@@ -33,7 +33,7 @@
   <div class="gutter-top">
     <button class="btn" ng-click="showEdit()">
       <i class="fa fa-pencil"></i>
-      Edit
+      Edit details
     </button>
     <button class="btn btn-danger" ng-click="deleteBook(book)">
       <i class="fa fa-minus-circle"></i>
@@ -42,33 +42,25 @@
   </div>
 </div>
 
-<form class="form form-horizontal" ng-submit="updateBook(book)" ng-show="mode == 'edit'">
+<form ng-submit="updateBook(book)" ng-show="mode == 'edit'">
   <h2>Edit book details</h2>
 
-  <div class="control-group">
-    <label class="control-label">
-      Title:
-    </label>
-    <div class="controls">
-      <input type="text" ng-model="book.title" />
-    </div>
-  </div>
+  <label>
+    Title:
+    <input type="text" ng-model="book.title" />
+  </label>
 
-  <div class="control-group">
-    <label class="control-label">
-      Author:
-    </label>
-    <div class="controls">
-      <input type="text" ng-model="book.author" />
-    </div>
-  </div>
+  <label>
+    Author:
+    <input type="text" ng-model="book.author" />
+  </label>
 
   <div>
     <button class="btn btn-success" type="submit">
       <i class="fa fa-check"></i>
       Save
     </button>
-    <button class="btn" ng-click="hideEdit()">
+    <button type="button" class="btn" ng-click="hideEdit()">
       Cancel
     </button>
   </div>
