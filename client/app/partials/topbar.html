@@ -10,6 +10,8 @@
       <li ng-show="isAuthenticated()">
         <a class="dropdown-toggle" data-toggle="dropdown" ng-click="toggleSidebar()">
           <img ng-src="{{currentUser.avatarUrl()}}" class="avatar"/>
+          <i class="fa fa-chevron-right" ng-hide="sidebarIsShown"></i>
+          <i class="fa fa-chevron-left" ng-show="sidebarIsShown"></i>
         </a>
       </li>
     </ul>
