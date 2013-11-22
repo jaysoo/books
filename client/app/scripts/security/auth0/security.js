@@ -1,4 +1,4 @@
-/* global Auth0 */
+/* global Auth0Widget */
 'use strict';
 
 define([
@@ -16,11 +16,12 @@ define([
   module.provider('SecurityService', [SecurityServiceProvider]);
 
   function SecurityServiceProvider() {
-    var currentUser;
+    var currentUser, loginWidget;
 
     function setAnonymousUser() {
       currentUser = User.anonymousUser();
     }
+
     setAnonymousUser();
 
     return {
@@ -32,12 +33,18 @@ define([
         loginFailure = reason;
       },
 
-      $get: ['$location', '$q', '$http', '$cookies', function($location, $q, $http, $cookies) {
+      $get: ['$location', '$q', '$http', '$cookies', '$window', 'config', function($location, $q, $http, $cookies, $window, config) {
         if (storedAccessToken) {
           $cookies.storedAccessToken = storedAccessToken;
         } else {
           storedAccessToken = $cookies.storedAccessToken;
         }
+
+        loginWidget = new Auth0Widget({
+          domain: config.AUTH0_DOMAIN,
+          clientID: config.AUTH0_CLIENT_ID,
+          callbackURL: window.location.protocol + '//' + window.location.host + '/auth/auth0/callback'
+        });
 
         return {
           loginFailed: function() {
@@ -76,7 +83,7 @@ define([
           },
 
           login: function() {
-            Auth0.signIn({onestep: true});
+            loginWidget.signin();
           },
 
           logout: function() {

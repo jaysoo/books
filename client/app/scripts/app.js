@@ -35,7 +35,7 @@ define([
     'security.login.form'
   ]);
 
-  app.constant('Config', config);
+  app.constant('config', config);
 
   app.controller('AppCtrl', AppCtrl);
 
