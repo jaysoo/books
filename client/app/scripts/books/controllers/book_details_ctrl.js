@@ -3,8 +3,8 @@
 'use strict';
 
 define(['lodash', 'app', 'goog!picker'], function(_, App) {
-  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'Config', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
-    function($scope, $routeParams, $location, $modal, Config, FavouritesRepository, SecurityService, BooksRepository) {
+  App.controller('BookDetailsCtrl', ['$scope', '$routeParams', '$location', '$modal', 'config', 'FavouritesRepository', 'SecurityService', 'BooksRepository',
+    function($scope, $routeParams, $location, $modal, config, FavouritesRepository, SecurityService, BooksRepository) {
       $scope.mode = 'show';
 
       BooksRepository.get($routeParams.bookId).then(function(book) {
@@ -55,8 +55,8 @@ define(['lodash', 'app', 'goog!picker'], function(_, App) {
         book.attachments = book.attachments || [];
 
         var picker = new google.picker.PickerBuilder()
-          .setAppId(Config.GOOGLE_APP_ID)
-          .setDeveloperKey(Config.GOOGLE_API_KEY)
+          .setAppId(config.GOOGLE_APP_ID)
+          .setDeveloperKey(config.GOOGLE_API_KEY)
           .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .addView(google.picker.ViewId.PDFS)
           .addView(google.picker.ViewId.DOCS)

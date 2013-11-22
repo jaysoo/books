@@ -20,14 +20,17 @@ define(function() {
 
     $scope.showBooks = function() {
       $location.path('/books');
+      $scope.sidebarIsShown = false;
     };
 
     $scope.showBookClub = function() {
       $location.path('/sessions');
+      $scope.sidebarIsShown = false;
     };
 
     $scope.showFavourites = function() {
       $location.path('/favourites');
+      $scope.sidebarIsShown = false;
     };
 
     $scope.$watch(function() {
