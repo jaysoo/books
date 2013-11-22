@@ -19,7 +19,8 @@ require({
     'async': '../bower_components/requirejs-plugins/src/async',
     'propertyParser': '../bower_components/requirejs-plugins/src/propertyParser',
     'goog': '../bower_components/requirejs-plugins/src/goog',
-    'moment': '../bower_components/moment/moment'
+    'moment': '../bower_components/moment/moment',
+    'showdown': '../bower_components/showdown/src/showdown'
   },
   shim: {
     'lodash': {

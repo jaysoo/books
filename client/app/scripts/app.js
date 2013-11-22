@@ -13,6 +13,8 @@ define([
   'angular-resource',
   'angular-route',
   'angular-fire',
+  'common/angular/markdown',
+
   'angular-bootstrap',
 
   // Security
@@ -30,6 +32,7 @@ define([
     'ngRoute',
     'firebase',
     'ui.bootstrap',
+    'markdown',
     'security',
     'security.authorization',
     'security.login.form'

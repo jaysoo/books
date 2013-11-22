@@ -6,7 +6,13 @@
 </div>
 
 <div class="sessions-current">
-  <h2>Current Session</h2>
+  <h2 ng-if="currentSession.voting_enabled">
+    Next Session
+  </h2>
+
+  <h2 ng-if="!currentSession.voting_enabled">
+    Currently Reading: {{currentSession.title}}
+  </h2>
 
   <div class="voting-control">
     <span class="voting-label">Voting</span>
@@ -21,10 +27,10 @@
     </div>
   </div>
 
-  <div class="well" ng-if="mode === 'show'">
-    <p><strong>Title:</strong> {{currentSession.title || '--'}}</p>
-    <p><strong>Created:</strong> {{currentSession.created_at | date:'longDate'}}</p>
-    <p><strong>Notes:</strong> {{currentSession.notes || '--'}}</p>
+  <div ng-if="mode === 'show'">
+    <p class="well">
+      <markdown ng-model="currentSession.notes"></markdown>
+    </p>
     <p>
       <button class="btn" ng-click="showEdit()">
         <i class="fa fa-pencil"></i>
@@ -37,11 +43,11 @@
     <label>
       Title:
     </label>
-    <input class="input-xlarge" type="text" ng-model="sessionToEdit.title" autofocus />
+    <input class="input-xxlarge" type="text" ng-model="sessionToEdit.title" autofocus />
     <label>
       Note:
     </label>
-    <textarea class="input-xlarge" rows="5" ng-model="sessionToEdit.notes"></textarea>
+    <textarea class="input-xxlarge" rows="10" ng-model="sessionToEdit.notes"></textarea>
     <p>
       <button class="btn btn-success" type="submit">
         <i class="fa fa-check"></i>
